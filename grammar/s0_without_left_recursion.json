@@ -1,0 +1,120 @@
+{
+  "name" : "S0",
+  "terminals" : [ {
+    "name" : "a",
+    "spell" : "a"
+  }, {
+    "name" : "b",
+    "spell" : "b"
+  }, {
+    "name" : "c",
+    "spell" : "c"
+  }, {
+    "name" : "d",
+    "spell" : "d"
+  }, {
+    "name" : "EPSILON",
+    "spell" : "eps"
+  } ],
+  "nonTerminals" : [ {
+    "name" : "S"
+  }, {
+    "name" : "A"
+  }, {
+    "name" : "A'"
+  } ],
+  "productions" : [ {
+    "lhs" : {
+      "name" : "S",
+      "type" : "nonterm"
+    },
+    "rhs" : [ {
+      "name" : "A",
+      "type" : "nonterm"
+    }, {
+      "name" : "a",
+      "type" : "term",
+      "spell" : "a"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S",
+      "type" : "nonterm"
+    },
+    "rhs" : [ {
+      "name" : "b",
+      "type" : "term",
+      "spell" : "b"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A'",
+      "type" : "nonterm"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "type" : "term",
+      "spell" : "a"
+    }, {
+      "name" : "d",
+      "type" : "term",
+      "spell" : "d"
+    }, {
+      "name" : "A'",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A'",
+      "type" : "nonterm"
+    },
+    "rhs" : [ {
+      "name" : "EPSILON",
+      "type" : "term",
+      "spell" : "eps"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A",
+      "type" : "nonterm"
+    },
+    "rhs" : [ {
+      "name" : "A'",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A",
+      "type" : "nonterm"
+    },
+    "rhs" : [ {
+      "name" : "b",
+      "type" : "term",
+      "spell" : "b"
+    }, {
+      "name" : "d",
+      "type" : "term",
+      "spell" : "d"
+    }, {
+      "name" : "A'",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A'",
+      "type" : "nonterm"
+    },
+    "rhs" : [ {
+      "name" : "c",
+      "type" : "term",
+      "spell" : "c"
+    }, {
+      "name" : "A'",
+      "type" : "nonterm"
+    } ]
+  } ],
+  "startSymbol" : {
+    "name" : "S"
+  },
+  "valid" : true
+}
