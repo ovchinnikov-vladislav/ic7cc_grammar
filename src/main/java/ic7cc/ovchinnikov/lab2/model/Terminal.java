@@ -8,7 +8,6 @@ import lombok.ToString;
 import java.util.Objects;
 
 @Getter
-@ToString
 public class Terminal extends Symbol {
 
     private final String spell;
@@ -18,7 +17,12 @@ public class Terminal extends Symbol {
         this.spell = spell;
     }
 
-    public static final Terminal EPSILON = new Terminal("EPSILON", "eps");
+    private Terminal(String name, String spell, Type type) {
+        super(name, type);
+        this.spell = spell;
+    }
+
+    public static final Terminal EPSILON = new Terminal("EPSILON", "eps", Type.EPS);
 
     @Override
     public boolean equals(Object o) {
@@ -33,5 +37,13 @@ public class Terminal extends Symbol {
     @Override
     public int hashCode() {
         return Objects.hash(spell, getName(), getType());
+    }
+
+    @Override
+    public String toString() {
+        return "Terminal{" +
+                "spell='" + spell + '\'' +
+                "name='" + getName() + '\'' +
+                '}';
     }
 }

@@ -19,13 +19,13 @@ public class Grammar {
     @JsonIgnoreProperties( { "type" })
     private final NonTerminal startSymbol;
 
-    public Grammar(String name, NonTerminal startSymbol) {
+    public Grammar(String name, String startSymbol) {
         this.name = name;
         this.terminals = new LinkedHashSet<>();
         this.nonTerminals = new LinkedHashSet<>();
         this.productions = new LinkedHashSet<>();
-        this.startSymbol = startSymbol;
-        this.nonTerminals.add(startSymbol);
+        this.startSymbol = new NonTerminal(startSymbol);
+        this.nonTerminals.add(this.startSymbol);
     }
 
     public boolean addTerminals(Terminal... terminals) {
@@ -48,7 +48,16 @@ public class Grammar {
                     throw new InvalidParameterException("NonTerminals doesnt contain NonTerminal {"+symbol+"}");
             }
         }
-        return productions.add(new Production(lhs, Arrays.asList(rhs)));
+        List<Symbol> resultRhs = new LinkedList<>(Arrays.asList(rhs));
+        for (Symbol symbol : rhs) {
+            if (symbol.getType() == Symbol.Type.EPS) {
+                resultRhs.remove(symbol);
+            }
+        }
+        if (resultRhs.size() == 0)
+            resultRhs.add(Terminal.EPSILON);
+
+        return productions.add(new Production(lhs, resultRhs));
     }
 
     public boolean addProduction(Production production) {

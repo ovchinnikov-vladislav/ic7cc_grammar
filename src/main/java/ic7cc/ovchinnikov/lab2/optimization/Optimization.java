@@ -6,10 +6,8 @@ import java.util.*;
 
 public class Optimization {
 
-    // TODO: Провести дебагинг и отладку. Вроде бы работает, написать тесты.
     public static Grammar leftRecursionElimination(Grammar grammar) {
-        NonTerminal startTerminal = new NonTerminal(grammar.getStartSymbol().getName());
-        Grammar newGrammar = new Grammar(grammar.getName(), startTerminal);
+        Grammar newGrammar = new Grammar(grammar.getName(), grammar.getStartSymbol().getName());
         newGrammar.addTerminals(grammar.getTerminals().toArray(Terminal[]::new));
         newGrammar.addNonTerminals(grammar.getNonTerminals().toArray(NonTerminal[]::new));
 
@@ -52,7 +50,9 @@ public class Optimization {
 
                         Terminal eps = Terminal.EPSILON;
                         grammar.addTerminals(eps);
-                        Production newProduction = new Production(newNonTerminal, new LinkedList<>() {{add(eps);}});
+                        Production newProduction = new Production(newNonTerminal, new LinkedList<>() {{
+                            add(eps);
+                        }});
 
                         grammar.addProduction(updateOldProduction);
                         grammar.addProduction(newProduction);
@@ -91,31 +91,105 @@ public class Optimization {
     }
 
     public static Grammar leftFactorization(Grammar grammar) {
-       /* Set<Symbol> nonTerminals = grammar.getNonTerminals();
 
-        for (Symbol nonTerminal : nonTerminals) {
-            int count = 0;
-            List<Production> productions = new ArrayList<>(grammar.findProductionsByLhs(nonTerminal));
+        Grammar newGrammar = new Grammar(grammar.getName(), grammar.getStartSymbol().getName());
+        newGrammar.addNonTerminals(grammar.getNonTerminals().toArray(NonTerminal[]::new));
+        newGrammar.addTerminals(grammar.getTerminals().toArray(Terminal[]::new));
 
+        boolean isDont = true;
+        for (NonTerminal nonTerminal : grammar.getNonTerminals()) {
+            if (findAllPrefixOfNonTerminal(grammar, nonTerminal).size() > 0) {
+                isDont = false;
+            }
+        }
+        if (isDont)
+            return grammar;
+
+        for (NonTerminal nonTerminal : grammar.getNonTerminals()) {
+            Map<List<Symbol>, Set<Production>> map = findAllPrefixOfNonTerminal(grammar, nonTerminal);
+            List<Symbol> symbols = null;
             int length = 0;
-            for (int i = 0; i < productions.size() - 1; i++) {
-                List<Symbol> symbolsI = productions.get(i).getRhs();
-                for (int j = i; j < productions.size(); j++) {
-                    List<Symbol> symbolsJ = productions.get(j).getRhs();
-                    int maxLength = 0;
-
+            for (Map.Entry<List<Symbol>, Set<Production>> entry : map.entrySet()) {
+                if (entry.getKey().size() > length) {
+                    length = entry.getKey().size();
+                    symbols = entry.getKey();
                 }
             }
 
+            if (symbols != null) {
+                Set<Production> productions = map.get(symbols);
+                int i = 0;
+                NonTerminal newNonTerminal = null;
+                for (Production production : grammar.getProductions()) {
+                    if (!productions.contains(production)) {
+                        newGrammar.addProduction(production);
+                    } else {
+                        Iterator<Symbol> iteratorProdRhs = production.getRhs().iterator();
+                        Iterator<Symbol> iteratorPrefix = symbols.iterator();
+                        List<Symbol> newRhs = new LinkedList<>();
+                        if (i == 0) {
+                            i++;
+                            newNonTerminal = new NonTerminal(production.getLhs().getName() + "'");
+                            while (grammar.getNonTerminals().contains(newNonTerminal)) {
+                                newNonTerminal = new NonTerminal(newNonTerminal.getName() + "'");
+                            }
+                        }
+                        while (iteratorPrefix.hasNext()) {
+                            if (iteratorProdRhs.hasNext()) {
+                                Symbol symbolPrefix = iteratorPrefix.next();
+                                Symbol symbolProdRhs = iteratorProdRhs.next();
+                                if (symbolPrefix.equals(symbolProdRhs))
+                                    newRhs.add(symbolPrefix);
+                                else
+                                    break;
+                            }
+                        }
+                        List<Symbol> rhsNewProduction = new LinkedList<>();
+                        while (iteratorProdRhs.hasNext()) {
+                            rhsNewProduction.add(iteratorProdRhs.next());
+                        }
+                        newGrammar.addNonTerminals(newNonTerminal);
+                        newGrammar.addProduction(newNonTerminal, rhsNewProduction.toArray(Symbol[]::new));
+                        newRhs.add(newNonTerminal);
+                        newGrammar.addProduction(production.getLhs(), newRhs.toArray(Symbol[]::new));
+                    }
+                }
+            }
         }
-        */
-        return null;
+
+        return leftFactorization(newGrammar);
     }
 
-    // TODO: провести рефакторинг и деббагинг, вроде бы работает, написать тесты
+    public static Map<List<Symbol>, Set<Production>> findAllPrefixOfNonTerminal(Grammar grammar, NonTerminal nonTerminal) {
+
+        Map<List<Symbol>, Integer> allPrefixCount = new HashMap<>();
+        Map<List<Symbol>, Set<Production>> allPrefixProduction = new HashMap<>();
+        for (Production production : grammar.getProductions()) {
+            if (production.getLhs().equals(nonTerminal)) {
+                List<Symbol> prefix = new LinkedList<>();
+                for (Symbol symbol : production.getRhs()) {
+                    prefix.add(symbol);
+                    int i = allPrefixCount.getOrDefault(prefix, 0);
+                    allPrefixCount.put(new LinkedList<>(prefix), ++i);
+                    Set<Production> productions = allPrefixProduction.getOrDefault(prefix, new HashSet<>());
+                    productions.add(production);
+                    allPrefixProduction.put(new LinkedList<>(prefix), productions);
+                }
+            }
+        }
+        Map<List<Symbol>, Set<Production>> resultPrefix = new HashMap<>();
+
+        for (Map.Entry<List<Symbol>, Integer> entry : allPrefixCount.entrySet()) {
+            if (entry.getValue() > 1) {
+                resultPrefix.put(entry.getKey(), allPrefixProduction.get(entry.getKey()));
+            }
+        }
+
+        return resultPrefix;
+    }
+
     public static Grammar removeLongRules(Grammar grammar) {
-        NonTerminal startSymbol = new NonTerminal(grammar.getStartSymbol().getName());
-        Grammar newGrammar = new Grammar(grammar.getName(), startSymbol);
+        Grammar newGrammar = new Grammar(grammar.getName(), grammar.getStartSymbol().getName());
         newGrammar.addTerminals(grammar.getTerminals().toArray(Terminal[]::new));
         newGrammar.addNonTerminals(grammar.getNonTerminals().toArray(NonTerminal[]::new));
 
@@ -148,136 +222,384 @@ public class Optimization {
     }
 
     public static Grammar removeEpsilonRules(Grammar grammar) {
-        // TODO: Сделать удаление эпсилон-правил
-        return null;
+        Map<Integer, Production> productionMap = new HashMap<>();
+        int i = 0;
+        for (Production production : grammar.getProductions()) {
+            if (!isContainsOnlyTerminal(production))
+                productionMap.put(++i, production);
+        }
+
+        Map<NonTerminal, Set<Integer>> concernedRules = new HashMap<>();
+        for (NonTerminal nonTerminal : grammar.getNonTerminals()) {
+            Set<Integer> numberRules = new HashSet<>();
+            for (Map.Entry<Integer, Production> entry : productionMap.entrySet()) {
+                if (entry.getValue().getRhs().contains(nonTerminal))
+                    numberRules.add(entry.getKey());
+            }
+            concernedRules.put(nonTerminal, numberRules);
+        }
+
+        Map<NonTerminal, Boolean> isEpsilon = new HashMap<>();
+        for (NonTerminal nonTerminal : grammar.getNonTerminals()) {
+            isEpsilon.put(nonTerminal, false);
+        }
+
+        Map<Integer, Integer> counter = new HashMap<>();
+        Queue<NonTerminal> queue = new ArrayDeque<>();
+        for (Map.Entry<Integer, Production> entry : productionMap.entrySet()) {
+            int count = 0;
+            for (Symbol symbol : entry.getValue().getRhs())
+                if (symbol.getType() == Symbol.Type.TERM || symbol.getType() == Symbol.Type.NON_TERM)
+                    count++;
+            counter.put(entry.getKey(), count);
+            if (count == 0) {
+                queue.add(entry.getValue().getLhs());
+                isEpsilon.put(entry.getValue().getLhs(), true);
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            NonTerminal nonTerminal = queue.remove();
+            Set<Integer> numberProd = concernedRules.get(nonTerminal);
+            for (int number : numberProd) {
+                counter.put(number, counter.get(number) - 1);
+                if (counter.get(number) == 0) {
+                    NonTerminal nt = productionMap.get(number).getLhs();
+                    if (!isEpsilon.get(nt)) {
+                        queue.add(nt);
+                        isEpsilon.put(nt, true);
+                    }
+                }
+            }
+        }
+
+        Grammar newGrammar;
+        if (isEpsilon.get(grammar.getStartSymbol())) {
+            newGrammar = new Grammar(grammar.getName(), grammar.getStartSymbol().getName() + "'");
+            NonTerminal newTerminalSp = newGrammar.getStartSymbol();
+            newGrammar.addTerminals(grammar.getTerminals().toArray(Terminal[]::new));
+            newGrammar.addNonTerminals(newTerminalSp);
+            newGrammar.addNonTerminals(grammar.getNonTerminals().toArray(NonTerminal[]::new));
+            newGrammar.addProduction(newTerminalSp, grammar.getStartSymbol());
+            newGrammar.addProduction(newTerminalSp, Terminal.EPSILON);
+        } else {
+            newGrammar = new Grammar(grammar.getName(), grammar.getStartSymbol().getName());
+            newGrammar.addTerminals(grammar.getTerminals().toArray(Terminal[]::new));
+            newGrammar.addNonTerminals(grammar.getNonTerminals().toArray(NonTerminal[]::new));
+        }
+
+        for (Production production : grammar.getProductions()) {
+            List<Symbol> rhs = production.getRhs();
+            if (!rhs.contains(Terminal.EPSILON)) {
+                if (rhs.size() == 2 && rhs.get(0) instanceof NonTerminal && rhs.get(1) instanceof NonTerminal &&
+                        isEpsilon.get((NonTerminal) rhs.get(0)) && isEpsilon.get((NonTerminal) rhs.get(1))) {
+                    newGrammar.addProduction(production.getLhs(), rhs.get(0));
+                    newGrammar.addProduction(production.getLhs(), rhs.get(1));
+                } else if (rhs.size() == 2 && rhs.get(0) instanceof NonTerminal && isEpsilon.get((NonTerminal) rhs.get(0))) {
+                    newGrammar.addProduction(production.getLhs(), rhs.get(1));
+                } else if (rhs.size() == 2 && rhs.get(1) instanceof NonTerminal && isEpsilon.get((NonTerminal) rhs.get(1))) {
+                    newGrammar.addProduction(production.getLhs(), rhs.get(0));
+                }
+                newGrammar.addProduction(production.getLhs(), rhs.toArray(Symbol[]::new));
+            }
+
+        }
+
+        return newGrammar;
+    }
+
+    public static boolean isContainsOnlyTerminal(Production production) {
+        for (Symbol symbol : production.getRhs()) {
+            if (symbol.getType() == Symbol.Type.NON_TERM || symbol.getType() == Symbol.Type.EPS)
+                return false;
+        }
+        return true;
     }
 
     public static Grammar removeChainRules(Grammar grammar) {
-        // TODO: Сделать удаление цепных правил
-        return null;
+        Queue<Pair<NonTerminal, NonTerminal>> queue = new ArrayDeque<>();
+        for (NonTerminal nonTerminal : grammar.getNonTerminals()) {
+            queue.add(new Pair<>(nonTerminal, nonTerminal));
+        }
+
+        Set<Pair<NonTerminal, NonTerminal>> set = new LinkedHashSet<>();
+        while (!queue.isEmpty()) {
+            Pair<NonTerminal, NonTerminal> pair = queue.remove();
+            set.add(pair);
+            for (Production production : grammar.getProductions()) {
+                if (production.getRhs().size() == 1 && production.getRhs().get(0).getType() == Symbol.Type.NON_TERM && pair.second.equals(production.getLhs())) {
+                    queue.add(new Pair<>(pair.first, (NonTerminal) production.getRhs().get(0)));
+                }
+            }
+        }
+
+        Grammar newGrammar = new Grammar(grammar.getName(), grammar.getStartSymbol().getName());
+        newGrammar.addNonTerminals(grammar.getNonTerminals().toArray(NonTerminal[]::new));
+        newGrammar.addTerminals(grammar.getTerminals().toArray(Terminal[]::new));
+        for (Pair<NonTerminal, NonTerminal> pair : set) {
+            for (Production production : grammar.getProductions()) {
+                if (!pair.second.equals(pair.first)) {
+                    if (!isChainRule(production) && production.getLhs().equals(pair.second)) {
+                        newGrammar.addProduction(pair.first, production.getRhs().toArray(Symbol[]::new));
+                    }
+                } else if (!isChainRule(production)) {
+                    newGrammar.addProduction(production);
+                }
+            }
+        }
+
+        return newGrammar;
+    }
+
+    private static boolean isChainRule(Production production) {
+        return production.getRhs().size() == 1 && production.getRhs().get(0).getType() == Symbol.Type.NON_TERM;
     }
 
     public static Grammar removeUselessCharacter(Grammar grammar) {
-        // TODO: Сделать удаление бесполезных символов
-        return null;
+        Grammar updateGrammar = removeNonGeneratingNonTerminals(grammar);
+        return removeUnreachableNonTerminal(updateGrammar);
+    }
+
+    public static Grammar removeNonGeneratingNonTerminals(Grammar grammar) {
+        Map<Integer, Production> productionMap = new HashMap<>();
+        int i = 0;
+        for (Production production : grammar.getProductions()) {
+            productionMap.put(++i, production);
+        }
+
+        Map<NonTerminal, Set<Integer>> concernedRules = new HashMap<>();
+        for (NonTerminal nonTerminal : grammar.getNonTerminals()) {
+            Set<Integer> numberRules = new HashSet<>();
+            for (Map.Entry<Integer, Production> entry : productionMap.entrySet()) {
+                if (entry.getValue().getRhs().contains(nonTerminal))
+                    numberRules.add(entry.getKey());
+            }
+            concernedRules.put(nonTerminal, numberRules);
+        }
+
+        Map<NonTerminal, Boolean> isGenerating = new HashMap<>();
+        for (NonTerminal nonTerminal : grammar.getNonTerminals()) {
+            isGenerating.put(nonTerminal, false);
+        }
+
+        Map<Integer, Integer> counter = new HashMap<>();
+        Queue<NonTerminal> queue = new ArrayDeque<>();
+        for (Map.Entry<Integer, Production> entry : productionMap.entrySet()) {
+            Set<Symbol> terminals = new HashSet<>();
+            for (Symbol symbol : entry.getValue().getRhs())
+                if (symbol.getType() == Symbol.Type.NON_TERM)
+                    terminals.add(symbol);
+            counter.put(entry.getKey(), terminals.size());
+            if (terminals.size() == 0) {
+                queue.add(entry.getValue().getLhs());
+                isGenerating.put(entry.getValue().getLhs(), true);
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            NonTerminal nonTerminal = queue.remove();
+            Set<Integer> numberProd = concernedRules.get(nonTerminal);
+            for (int number : numberProd) {
+                counter.put(number, counter.get(number) - 1);
+                if (counter.get(number) == 0) {
+                    NonTerminal nt = productionMap.get(number).getLhs();
+                    if (!isGenerating.get(nt)) {
+                        queue.add(nt);
+                        isGenerating.put(nt, true);
+                    }
+                }
+            }
+        }
+        Set<Production> productions = new LinkedHashSet<>(grammar.getProductions());
+        for (Production production : grammar.getProductions()) {
+            for (Symbol symbol : production.getRhs()) {
+                if (symbol instanceof NonTerminal && !isGenerating.get(symbol)) {
+                    productions.remove(production);
+                    break;
+                }
+            }
+        }
+        Grammar newGrammar = new Grammar(grammar.getName(), grammar.getStartSymbol().getName());
+        newGrammar.addTerminals(grammar.getTerminals().toArray(Terminal[]::new));
+        newGrammar.addNonTerminals(grammar.getNonTerminals().toArray(NonTerminal[]::new));
+        for (Production production : productions) {
+            newGrammar.addProduction(production);
+        }
+
+        return newGrammar;
+    }
+
+    public static Grammar removeUnreachableNonTerminal(Grammar grammar) {
+
+        Set<NonTerminal> terminals = new HashSet<>();
+        terminals.add(grammar.getStartSymbol());
+        Queue<NonTerminal> queue = new ArrayDeque<>();
+        queue.add(grammar.getStartSymbol());
+        while (!queue.isEmpty()) {
+            NonTerminal nonTerminal = queue.remove();
+            for (Production production : grammar.getProductions()) {
+                if (nonTerminal.equals(production.getLhs())) {
+                    for (Symbol symbol : production.getRhs()) {
+                        if (symbol instanceof NonTerminal && !terminals.contains(symbol)) {
+                            queue.add((NonTerminal) symbol);
+                            terminals.add((NonTerminal) symbol);
+                        }
+                    }
+                }
+            }
+        }
+
+        Set<Production> productions = new LinkedHashSet<>();
+        for (Production production : grammar.getProductions()) {
+            if (terminals.contains(production.getLhs()))
+                productions.add(production);
+        }
+        Grammar newGrammar = new Grammar(grammar.getName(), grammar.getStartSymbol().getName());
+        newGrammar.addTerminals(grammar.getTerminals().toArray(Terminal[]::new));
+        newGrammar.addNonTerminals(grammar.getNonTerminals().toArray(NonTerminal[]::new));
+
+        for (Production production : productions) {
+            newGrammar.addProduction(production);
+        }
+
+        return newGrammar;
     }
 
     public static Grammar removeMeetingSeveralTerminals(Grammar grammar) {
-        // TODO: Сделать удаление встречи нескольких терминалов в одном правиле
-        return null;
-    }
-/*
-    public static Grammar conversionToChomskyNormalForm(Grammar grammar) {
-        Symbol startTerminal = Symbol.builder()
-                .type(grammar.getStartSymbol().getType())
-                .name(grammar.getStartSymbol().getName())
-                .build();
-        Set<Production> productions = grammar.getProductions();
 
-        Set<Production> newProductions = new HashSet<>();
-        Set<Symbol> nonTerminals = new HashSet<>(grammar.getNonTerminals());
-        Set<Symbol> terminals = new HashSet<>(grammar.getTerminals());
+        Grammar newGrammar = new Grammar(grammar.getName(), grammar.getStartSymbol().getName());
+        newGrammar.addTerminals(grammar.getTerminals().toArray(Terminal[]::new));
+        newGrammar.addNonTerminals(grammar.getNonTerminals().toArray(NonTerminal[]::new));
 
-        for (Production production : productions) {
-            Symbol lhs = production.getLhs();
+        for (Production production : grammar.getProductions()) {
             List<Symbol> rhs = production.getRhs();
-            if ((rhs.size() == 1 || rhs.size() == 2) && rhs.get(0).getType() == Symbol.Type.TERM)
-                newProductions.add(production);
-            else if (lhs.equals(grammar.getStartSymbol()) && rhs.size() == 1 && rhs.get(0).getType() == Symbol.Type.EPS)
-                newProductions.add(production);
-            else if (rhs.size() == 2 && rhs.get(0).getType() == Symbol.Type.NON_TERM && rhs.get(1).getType() == Symbol.Type.NON_TERM)
-                newProductions.add(production);
-
-            if (rhs.size() > 2) {
-                Symbol nonTerminal = production.getLhs();
-                for (int i = 0; i < rhs.size() - 2; i++) {
-                    Symbol newNonTerminal = Symbol.builder()
-                            .type(Symbol.Type.NON_TERM)
-                            .name(production.getLhs().getName() + i)
-                            .build();
-                    nonTerminals.add(newNonTerminal);
-                    List<Symbol> newRhs = new ArrayList<>();
-
-                    newRhs.add(rhs.get(i));
-                    newRhs.add(newNonTerminal);
-                    Production newProduction = Production.builder()
-                            .lhs(nonTerminal)
-                            .rhs(newRhs)
-                            .build();
-                    nonTerminal = newNonTerminal;
-                    newProductions.add(newProduction);
-                }
-                Production prod = Production.builder()
-                        .lhs(nonTerminal)
-                        .rhs(new ArrayList<>() {{
-                            add(rhs.get(rhs.size() - 2));
-                            add(rhs.get(rhs.size() - 1));
-                        }})
-                        .build();
-                newProductions.add(prod);
-
-                newProductions.remove(production);
-            }
-        }
-
-        Set<Production> resultProductions = new HashSet<>(newProductions);
-        for (Production production : newProductions) {
-            List<Symbol> rhs = production.getRhs();
-            if (rhs.size() == 2) {
+            if (rhs.size() == 2 && (rhs.get(0).getType() == Symbol.Type.TERM || rhs.get(1).getType() == Symbol.Type.TERM)) {
+                List<Symbol> newRhs = new ArrayList<>();
                 if (rhs.get(0).getType() == Symbol.Type.TERM) {
-                    Symbol nonTerminal = Symbol.builder()
-                            .type(Symbol.Type.NON_TERM)
-                            .spell(null)
-                            .name(rhs.get(0).getSpell().toUpperCase() + "'")
-                            .build();
-
-                    nonTerminals.add(nonTerminal);
-
-                    Production newProduction = Production.builder()
-                            .lhs(nonTerminal)
-                            .rhs(new ArrayList<>() {{
-                                add(rhs.get(0));
-                            }})
-                            .build();
-                    rhs.set(0, nonTerminal);
-                    resultProductions.remove(production);
-                    resultProductions.add(newProduction);
+                    NonTerminal nt = new NonTerminal(rhs.get(0).getName().toUpperCase() + "'");
+                    newGrammar.addNonTerminals(nt);
+                    List<Symbol> nrhs = new LinkedList<>();
+                    nrhs.add(rhs.get(0));
+                    Production np = new Production(nt, nrhs);
+                    newGrammar.addProduction(np);
+                    newRhs.add(nt);
+                } else {
+                    newRhs.add(rhs.get(0));
                 }
+
                 if (rhs.get(1).getType() == Symbol.Type.TERM) {
-                    Symbol nonTerminal = Symbol.builder()
-                            .type(Symbol.Type.NON_TERM)
-                            .spell(null)
-                            .name(rhs.get(1).getSpell().toUpperCase() + "'")
-                            .build();
-
-                    nonTerminals.add(nonTerminal);
-                    Production newProduction = Production.builder()
-                            .lhs(nonTerminal)
-                            .rhs(new ArrayList<>() {{
-                                add(rhs.get(1));
-                            }})
-                            .build();
-                    rhs.set(1, nonTerminal);
-                    resultProductions.remove(production);
-                    resultProductions.add(newProduction);
+                    NonTerminal nt = new NonTerminal(rhs.get(1).getName().toUpperCase() + "'");
+                    newGrammar.addNonTerminals(nt);
+                    List<Symbol> nrhs = new LinkedList<>();
+                    nrhs.add(rhs.get(1));
+                    Production np = new Production(nt, nrhs);
+                    newGrammar.addProduction(np);
+                    newRhs.add(nt);
+                } else {
+                    newRhs.add(rhs.get(1));
                 }
+                Production newProduction = new Production(production.getLhs(), newRhs);
+                newGrammar.addProduction(newProduction);
+            } else {
+                newGrammar.addProduction(production);
             }
         }
-
-        grammar = removeEpsilonRules(grammar);
-        grammar = removeChainRules(grammar);
-        grammar = removeUselessCharacter(grammar);
-        grammar = removeUselessCharacter(grammar);
-
-        return Grammar.builder()
-                .productions(resultProductions)
-                .terminals(terminals)
-                .nonTerminals(nonTerminals)
-                .startSymbol(startTerminal)
-                .name(grammar.getName())
-                .build();
+        return newGrammar;
     }
 
+    public static Grammar conversionToChomskyNormalForm(Grammar grammar) {
+        boolean isRightStartSymbol = false;
+        for (Production production : grammar.getProductions()) {
+            if (production.getRhs().contains(grammar.getStartSymbol())) {
+                isRightStartSymbol = true;
+                break;
+            }
+        }
+        if (isRightStartSymbol) {
+            Grammar newGrammar = new Grammar(grammar.getName(), grammar.getStartSymbol().getName() + "'");
+            NonTerminal nonTerminal = newGrammar.getStartSymbol();
+            List<NonTerminal> nonTerminals = new LinkedList<>(grammar.getNonTerminals());
+            nonTerminals.add(nonTerminal);
+            newGrammar.addNonTerminals(nonTerminals.toArray(NonTerminal[]::new));
+            newGrammar.addTerminals(grammar.getTerminals().toArray(Terminal[]::new));
+            newGrammar.addProduction(nonTerminal, grammar.getStartSymbol());
+            for (Production production : grammar.getProductions()) {
+                newGrammar.addProduction(production);
+            }
+            grammar = newGrammar;
+        }
 
-*/
+        return removeDontUseNonTerminals(
+                removeMeetingSeveralTerminals(
+                        removeUselessCharacter(
+                                removeChainRules(
+                                        removeEpsilonRules(
+                                                removeLongRules(grammar)
+                                        )
+                                )
+                        )
+                )
+        );
+    }
+
+    private static Grammar removeDontUseNonTerminals(Grammar grammar) {
+        Grammar newGrammar = new Grammar(grammar.getName(), grammar.getStartSymbol().getName());
+        newGrammar.addTerminals(grammar.getTerminals().toArray(Terminal[]::new));
+
+        for (NonTerminal nonTerminal : grammar.getNonTerminals()) {
+            boolean isUse = false;
+            for (Production production : grammar.getProductions()) {
+                if (nonTerminal.equals(production.getLhs())) {
+                    isUse = true;
+                    break;
+                }
+            }
+            if (isUse)
+                newGrammar.addNonTerminals(nonTerminal);
+        }
+        for (Production production : grammar.getProductions()) {
+            newGrammar.addProduction(production);
+        }
+        return newGrammar;
+    }
+
+    private static class Pair<T, S> {
+        private T first;
+        private S second;
+
+        public Pair(T first, S second) {
+            this.first = first;
+            this.second = second;
+        }
+
+        public T getFirst() {
+            return first;
+        }
+
+        public S getSecond() {
+            return second;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Pair<?, ?> pair = (Pair<?, ?>) o;
+            return Objects.equals(first, pair.first) &&
+                    Objects.equals(second, pair.second);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(first, second);
+        }
+
+        @Override
+        public String toString() {
+            return "Pair{" +
+                    "first=" + first +
+                    ", second=" + second +
+                    '}';
+        }
+    }
 }

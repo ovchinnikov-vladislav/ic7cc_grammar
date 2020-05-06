@@ -7,7 +7,6 @@ import lombok.ToString;
 import java.util.Objects;
 
 @Getter
-@ToString
 public class NonTerminal extends Symbol {
 
     public NonTerminal(String name) {
@@ -26,5 +25,12 @@ public class NonTerminal extends Symbol {
     @Override
     public int hashCode() {
         return Objects.hash(getName(), getType());
+    }
+
+    @Override
+    public String toString() {
+        return "NonTerminal{" +
+                "name='" + getName() + '\'' +
+                '}';
     }
 }
