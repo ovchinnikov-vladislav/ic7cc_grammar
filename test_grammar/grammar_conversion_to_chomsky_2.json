@@ -1,0 +1,71 @@
+{
+  "name" : "Test Chomsky",
+  "startSymbol" : {
+    "name" : "S"
+  },
+  "terminals" : [ {
+    "name" : "a",
+    "spell" : "a"
+  }, {
+    "name" : "b",
+    "spell" : "b"
+  }, {
+    "name" : "EPSILON",
+    "spell" : ""
+  } ],
+  "nonTerminals" : [ {
+    "name" : "S"
+  }, {
+    "name" : "U"
+  } ],
+  "productions" : [ {
+    "lhs" : {
+      "name" : "S"
+    },
+    "rhs" : [ {
+      "name" : "EPSILON",
+      "spell" : "",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    }, {
+      "name" : "U",
+      "type" : "nonterm"
+    }, {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    }, {
+      "name" : "U",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "U"
+    },
+    "rhs" : [ {
+      "name" : "S",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "U"
+    },
+    "rhs" : [ {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    }, {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    } ]
+  } ]
+}

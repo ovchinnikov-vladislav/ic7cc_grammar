@@ -1,0 +1,77 @@
+{
+  "name" : "Remove Meeting Several Terminals",
+  "startSymbol" : {
+    "name" : "A"
+  },
+  "terminals" : [ {
+    "name" : "a",
+    "spell" : "a"
+  }, {
+    "name" : "b",
+    "spell" : "b"
+  }, {
+    "name" : "c",
+    "spell" : "c"
+  }, {
+    "name" : "d",
+    "spell" : "d"
+  } ],
+  "nonTerminals" : [ {
+    "name" : "A"
+  }, {
+    "name" : "B"
+  }, {
+    "name" : "C"
+  } ],
+  "productions" : [ {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    }, {
+      "name" : "B",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    }, {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "B"
+    },
+    "rhs" : [ {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    }, {
+      "name" : "C",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "C"
+    },
+    "rhs" : [ {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
+    }, {
+      "name" : "d",
+      "spell" : "d",
+      "type" : "term"
+    } ]
+  } ]
+}

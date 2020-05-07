@@ -1,22 +1,18 @@
 package ic7cc.ovchinnikov.lab2.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
 import java.security.InvalidParameterException;
 import java.util.*;
 
-@ToString
 @EqualsAndHashCode
 public class Grammar {
 
     private final String name;
-    @JsonIgnoreProperties( { "type" })
     private final Set<Terminal> terminals;
-    @JsonIgnoreProperties( { "type" })
     private final Set<NonTerminal> nonTerminals;
     private final Set<Production> productions;
-    @JsonIgnoreProperties( { "type" })
     private final NonTerminal startSymbol;
 
     public Grammar(String name, String startSymbol) {
@@ -26,6 +22,17 @@ public class Grammar {
         this.productions = new LinkedHashSet<>();
         this.startSymbol = new NonTerminal(startSymbol);
         this.nonTerminals.add(this.startSymbol);
+    }
+
+    @JsonCreator
+    public Grammar(@JsonProperty("name") String name, @JsonProperty("startSymbol") NonTerminal startSymbol,
+                   @JsonProperty("terminals") Set<Terminal> terminals, @JsonProperty("nonTerminals") Set<NonTerminal> nonTerminals,
+                   @JsonProperty("productions") Set<Production> productions) {
+        this.name = name;
+        this.terminals = terminals;
+        this.nonTerminals = nonTerminals;
+        this.productions = productions;
+        this.startSymbol = startSymbol;
     }
 
     public boolean addTerminals(Terminal... terminals) {
@@ -40,22 +47,22 @@ public class Grammar {
         if (!nonTerminals.contains(lhs))
             throw new InvalidParameterException("NonTerminals doesnt contain NonTerminal  {"+lhs+"}");
         for (Symbol symbol : rhs) {
-            if (symbol instanceof Terminal) {
-                if (!terminals.contains(symbol))
+            if (symbol.isTerminal()) {
+                if (!terminals.contains(symbol.isTerminalGetting()))
                     throw new InvalidParameterException("Terminals doesnt contain Terminal {"+symbol+"}");
-            } else if (symbol instanceof NonTerminal) {
-                if (!nonTerminals.contains(symbol))
+            } else if (symbol.isNonTerminal()) {
+                if (!nonTerminals.contains(symbol.isNonTerminalGetting()))
                     throw new InvalidParameterException("NonTerminals doesnt contain NonTerminal {"+symbol+"}");
             }
         }
         List<Symbol> resultRhs = new LinkedList<>(Arrays.asList(rhs));
         for (Symbol symbol : rhs) {
-            if (symbol.getType() == Symbol.Type.EPS) {
+            if (symbol.isEpsilon()) {
                 resultRhs.remove(symbol);
             }
         }
         if (resultRhs.size() == 0)
-            resultRhs.add(Terminal.EPSILON);
+            resultRhs.add(Symbol.of(Terminal.EPSILON));
 
         return productions.add(new Production(lhs, resultRhs));
     }
@@ -64,11 +71,11 @@ public class Grammar {
         if (!nonTerminals.contains(production.getLhs()))
             throw new InvalidParameterException("NonTerminals doesnt contain NonTerminal  {"+production.getLhs()+"}");
         for (Symbol symbol : production.getRhs()) {
-            if (symbol instanceof Terminal) {
-                if (!terminals.contains(symbol))
+            if (symbol.isTerminal()) {
+                if (!terminals.contains(symbol.isTerminalGetting()))
                     throw new InvalidParameterException("Terminals doesnt contain Terminal {"+symbol+"}");
-            } else if (symbol instanceof NonTerminal) {
-                if (!nonTerminals.contains(symbol))
+            } else if (symbol.isNonTerminal()) {
+                if (!nonTerminals.contains(symbol.isNonTerminalGetting()))
                     throw new InvalidParameterException("NonTerminals doesnt contain NonTerminal {"+symbol+"}");
             }
         }
@@ -108,11 +115,31 @@ public class Grammar {
         return resultProductions;
     }
 
+    @JsonIgnore
     public boolean isValid() {
         if (terminals.isEmpty() || nonTerminals.isEmpty() || productions.isEmpty())
             return false;
         if (startSymbol == null)
             return false;
         return nonTerminals.contains(startSymbol);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder productionString = new StringBuilder();
+        for (Production production : productions) {
+            productionString.append("\t\t").append(production.getLhs().getName()).append(" -> ");
+            for (Symbol symbol : production.getRhs())
+                productionString.append(symbol.getName()).append(" ");
+            productionString.append("\n");
+        }
+
+        return "Grammar {\n" +
+                    "\tStartSymbol: " + startSymbol.getName() + "\n" +
+                    "\tTerminals: " + Arrays.toString(terminals.stream().map(Terminal::getName).toArray()) + "\n" +
+                    "\tNonTerminals: " + Arrays.toString(nonTerminals.stream().map(NonTerminal::getName).toArray()) + "\n" +
+                    "\tProductions: \n" + productionString +
+                "}";
+
     }
 }

@@ -1,5 +1,7 @@
 package ic7cc.ovchinnikov.lab2.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.Collections;
@@ -12,7 +14,8 @@ public class Production {
     private final NonTerminal lhs;
     private final List<Symbol> rhs;
 
-    public Production(NonTerminal lhs, List<Symbol> rhs) {
+    @JsonCreator
+    public Production(@JsonProperty("lhs") NonTerminal lhs, @JsonProperty("rhs") List<Symbol> rhs) {
         this.lhs = lhs;
         this.rhs = rhs;
     }

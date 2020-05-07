@@ -1,8 +1,10 @@
 package ic7cc.ovchinnikov.lab2.optimization;
 
 import ic7cc.ovchinnikov.lab2.model.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 public class Optimization {
 
@@ -19,13 +21,13 @@ public class Optimization {
 
         for (int i = 0, size = nonTerms.size(); i < size; i++) {
             for (int j = 0; j < i; j++) {
-                Set<Production> productionsNonTerminalI = grammar.findProductionsByLhs(nonTerms.get(i));
+                Set<Production> productionsNonTerminalI = grammar.findProductionsByLhs(Symbol.of(nonTerms.get(i)));
                 for (Production pi : productionsNonTerminalI) {
-                    if (pi.getRhs().get(0).equals(nonTerms.get(j))) {
+                    if (pi.getRhs().get(0).equals(Symbol.of(nonTerms.get(j)))) {
                         List<Symbol> rhspi = new LinkedList<>(pi.getRhs());
                         grammar.removeProduction(pi);
                         rhspi.remove(0);
-                        Set<Production> productionsNonTerminalJ = grammar.findProductionsByLhs(nonTerms.get(j));
+                        Set<Production> productionsNonTerminalJ = grammar.findProductionsByLhs(Symbol.of(nonTerms.get(j)));
                         for (Production pj : productionsNonTerminalJ) {
                             List<Symbol> rhs = new LinkedList<>(pj.getRhs());
                             rhs.addAll(rhspi);
@@ -36,22 +38,22 @@ public class Optimization {
                 }
             }
 
-            if (isRecursive(grammar, nonTerms.get(i))) {
-                Set<Production> productionsNonTerminalI = grammar.findProductionsByLhs(nonTerms.get(i));
+            if (isRecursive(grammar, Symbol.of(nonTerms.get(i)))) {
+                Set<Production> productionsNonTerminalI = grammar.findProductionsByLhs(Symbol.of(nonTerms.get(i)));
                 for (Production production : productionsNonTerminalI) {
                     grammar.removeProduction(production);
-                    if (production.getRhs().get(0).equals(nonTerms.get(i))) {
+                    if (production.getRhs().get(0).equals(Symbol.of(nonTerms.get(i)))) {
                         LinkedList<Symbol> rhs = new LinkedList<>(production.getRhs());
                         rhs.removeFirst();
                         NonTerminal newNonTerminal = new NonTerminal(nonTerms.get(i).getName() + "'");
                         grammar.addNonTerminals(newNonTerminal);
-                        rhs.add(newNonTerminal);
+                        rhs.add(Symbol.of(newNonTerminal));
                         Production updateOldProduction = new Production(newNonTerminal, rhs);
 
                         Terminal eps = Terminal.EPSILON;
                         grammar.addTerminals(eps);
                         Production newProduction = new Production(newNonTerminal, new LinkedList<>() {{
-                            add(eps);
+                            add(Symbol.of(eps));
                         }});
 
                         grammar.addProduction(updateOldProduction);
@@ -60,8 +62,8 @@ public class Optimization {
                         NonTerminal newNonTerminal = new NonTerminal(nonTerms.get(i).getName() + "'");
                         grammar.addNonTerminals(newNonTerminal);
                         LinkedList<Symbol> rhs = new LinkedList<>(production.getRhs());
-                        rhs.remove(Terminal.EPSILON);
-                        rhs.add(newNonTerminal);
+                        rhs.remove(Symbol.of(Terminal.EPSILON));
+                        rhs.add(Symbol.of(newNonTerminal));
                         Production updateOldProduction = new Production(production.getLhs(), rhs);
 
                         grammar.addProduction(updateOldProduction);
@@ -76,13 +78,13 @@ public class Optimization {
     private static boolean isRecursive(Grammar grammar, Symbol nonTerm) {
         Set<Production> productions = grammar.findProductionsByLhs(nonTerm);
         for (Production p : productions) {
-            if (p.getRhs().contains(p.getLhs()))
+            if (p.getRhs().contains(Symbol.of(p.getLhs())))
                 return true;
         }
         return false;
     }
 
-    private static boolean isProductionLhsNonTerminalNextRhsNonTerminal(List<Production> productions, Symbol lhsNonTerminal, Symbol rhsNonTerminal) {
+    private static boolean isProductionLhsNonTerminalNextRhsNonTerminal(List<Production> productions, NonTerminal lhsNonTerminal, Symbol rhsNonTerminal) {
         for (Production production : productions) {
             if (production.getLhs().equals(lhsNonTerminal) && production.getRhs().contains(rhsNonTerminal))
                 return true;
@@ -150,7 +152,7 @@ public class Optimization {
                         }
                         newGrammar.addNonTerminals(newNonTerminal);
                         newGrammar.addProduction(newNonTerminal, rhsNewProduction.toArray(Symbol[]::new));
-                        newRhs.add(newNonTerminal);
+                        newRhs.add(Symbol.of(newNonTerminal));
                         newGrammar.addProduction(production.getLhs(), newRhs.toArray(Symbol[]::new));
                     }
                 }
@@ -204,7 +206,7 @@ public class Optimization {
                     List<Symbol> newRhs = new ArrayList<>();
 
                     newRhs.add(rhs.get(i));
-                    newRhs.add(newNonTerminal);
+                    newRhs.add(Symbol.of(newNonTerminal));
                     Production newProduction = new Production(nonTerminal, newRhs);
                     nonTerminal = newNonTerminal;
                     newGrammar.addProduction(newProduction);
@@ -233,7 +235,7 @@ public class Optimization {
         for (NonTerminal nonTerminal : grammar.getNonTerminals()) {
             Set<Integer> numberRules = new HashSet<>();
             for (Map.Entry<Integer, Production> entry : productionMap.entrySet()) {
-                if (entry.getValue().getRhs().contains(nonTerminal))
+                if (entry.getValue().getRhs().contains(Symbol.of(nonTerminal)))
                     numberRules.add(entry.getKey());
             }
             concernedRules.put(nonTerminal, numberRules);
@@ -249,7 +251,7 @@ public class Optimization {
         for (Map.Entry<Integer, Production> entry : productionMap.entrySet()) {
             int count = 0;
             for (Symbol symbol : entry.getValue().getRhs())
-                if (symbol.getType() == Symbol.Type.TERM || symbol.getType() == Symbol.Type.NON_TERM)
+                if (symbol.isTerminal() || symbol.isNonTerminal())
                     count++;
             counter.put(entry.getKey(), count);
             if (count == 0) {
@@ -280,8 +282,8 @@ public class Optimization {
             newGrammar.addTerminals(grammar.getTerminals().toArray(Terminal[]::new));
             newGrammar.addNonTerminals(newTerminalSp);
             newGrammar.addNonTerminals(grammar.getNonTerminals().toArray(NonTerminal[]::new));
-            newGrammar.addProduction(newTerminalSp, grammar.getStartSymbol());
-            newGrammar.addProduction(newTerminalSp, Terminal.EPSILON);
+            newGrammar.addProduction(newTerminalSp, Symbol.of(grammar.getStartSymbol()));
+            newGrammar.addProduction(newTerminalSp, Symbol.of(Terminal.EPSILON));
         } else {
             newGrammar = new Grammar(grammar.getName(), grammar.getStartSymbol().getName());
             newGrammar.addTerminals(grammar.getTerminals().toArray(Terminal[]::new));
@@ -290,14 +292,14 @@ public class Optimization {
 
         for (Production production : grammar.getProductions()) {
             List<Symbol> rhs = production.getRhs();
-            if (!rhs.contains(Terminal.EPSILON)) {
-                if (rhs.size() == 2 && rhs.get(0) instanceof NonTerminal && rhs.get(1) instanceof NonTerminal &&
-                        isEpsilon.get((NonTerminal) rhs.get(0)) && isEpsilon.get((NonTerminal) rhs.get(1))) {
+            if (!rhs.contains(Symbol.of(Terminal.EPSILON))) {
+                if (rhs.size() == 2 && rhs.get(0).isNonTerminal() && rhs.get(1).isNonTerminal() &&
+                        isEpsilon.get(rhs.get(0).isNonTerminalGetting()) && isEpsilon.get(rhs.get(1).isNonTerminalGetting())) {
                     newGrammar.addProduction(production.getLhs(), rhs.get(0));
                     newGrammar.addProduction(production.getLhs(), rhs.get(1));
-                } else if (rhs.size() == 2 && rhs.get(0) instanceof NonTerminal && isEpsilon.get((NonTerminal) rhs.get(0))) {
+                } else if (rhs.size() == 2 && rhs.get(0).isNonTerminal() && isEpsilon.get(rhs.get(0).isNonTerminalGetting())) {
                     newGrammar.addProduction(production.getLhs(), rhs.get(1));
-                } else if (rhs.size() == 2 && rhs.get(1) instanceof NonTerminal && isEpsilon.get((NonTerminal) rhs.get(1))) {
+                } else if (rhs.size() == 2 && rhs.get(1).isNonTerminal() && isEpsilon.get(rhs.get(1).isNonTerminalGetting())) {
                     newGrammar.addProduction(production.getLhs(), rhs.get(0));
                 }
                 newGrammar.addProduction(production.getLhs(), rhs.toArray(Symbol[]::new));
@@ -310,7 +312,7 @@ public class Optimization {
 
     public static boolean isContainsOnlyTerminal(Production production) {
         for (Symbol symbol : production.getRhs()) {
-            if (symbol.getType() == Symbol.Type.NON_TERM || symbol.getType() == Symbol.Type.EPS)
+            if (symbol.isNonTerminal() || symbol.isEpsilon())
                 return false;
         }
         return true;
@@ -327,8 +329,8 @@ public class Optimization {
             Pair<NonTerminal, NonTerminal> pair = queue.remove();
             set.add(pair);
             for (Production production : grammar.getProductions()) {
-                if (production.getRhs().size() == 1 && production.getRhs().get(0).getType() == Symbol.Type.NON_TERM && pair.second.equals(production.getLhs())) {
-                    queue.add(new Pair<>(pair.first, (NonTerminal) production.getRhs().get(0)));
+                if (production.getRhs().size() == 1 && production.getRhs().get(0).isNonTerminal() && pair.second.equals(production.getLhs())) {
+                    queue.add(new Pair<>(pair.first, production.getRhs().get(0).isNonTerminalGetting()));
                 }
             }
         }
@@ -352,7 +354,7 @@ public class Optimization {
     }
 
     private static boolean isChainRule(Production production) {
-        return production.getRhs().size() == 1 && production.getRhs().get(0).getType() == Symbol.Type.NON_TERM;
+        return production.getRhs().size() == 1 && production.getRhs().get(0).isNonTerminal();
     }
 
     public static Grammar removeUselessCharacter(Grammar grammar) {
@@ -371,7 +373,7 @@ public class Optimization {
         for (NonTerminal nonTerminal : grammar.getNonTerminals()) {
             Set<Integer> numberRules = new HashSet<>();
             for (Map.Entry<Integer, Production> entry : productionMap.entrySet()) {
-                if (entry.getValue().getRhs().contains(nonTerminal))
+                if (entry.getValue().getRhs().contains(Symbol.of(nonTerminal)))
                     numberRules.add(entry.getKey());
             }
             concernedRules.put(nonTerminal, numberRules);
@@ -387,7 +389,7 @@ public class Optimization {
         for (Map.Entry<Integer, Production> entry : productionMap.entrySet()) {
             Set<Symbol> terminals = new HashSet<>();
             for (Symbol symbol : entry.getValue().getRhs())
-                if (symbol.getType() == Symbol.Type.NON_TERM)
+                if (symbol.isNonTerminal())
                     terminals.add(symbol);
             counter.put(entry.getKey(), terminals.size());
             if (terminals.size() == 0) {
@@ -413,7 +415,7 @@ public class Optimization {
         Set<Production> productions = new LinkedHashSet<>(grammar.getProductions());
         for (Production production : grammar.getProductions()) {
             for (Symbol symbol : production.getRhs()) {
-                if (symbol instanceof NonTerminal && !isGenerating.get(symbol)) {
+                if (symbol.isNonTerminal() && !isGenerating.get(symbol.isNonTerminalGetting())) {
                     productions.remove(production);
                     break;
                 }
@@ -431,8 +433,8 @@ public class Optimization {
 
     public static Grammar removeUnreachableNonTerminal(Grammar grammar) {
 
-        Set<NonTerminal> terminals = new HashSet<>();
-        terminals.add(grammar.getStartSymbol());
+        Set<NonTerminal> nonTerminals = new HashSet<>();
+        nonTerminals.add(grammar.getStartSymbol());
         Queue<NonTerminal> queue = new ArrayDeque<>();
         queue.add(grammar.getStartSymbol());
         while (!queue.isEmpty()) {
@@ -440,9 +442,9 @@ public class Optimization {
             for (Production production : grammar.getProductions()) {
                 if (nonTerminal.equals(production.getLhs())) {
                     for (Symbol symbol : production.getRhs()) {
-                        if (symbol instanceof NonTerminal && !terminals.contains(symbol)) {
-                            queue.add((NonTerminal) symbol);
-                            terminals.add((NonTerminal) symbol);
+                        if (symbol.isNonTerminal() && !nonTerminals.contains(symbol.isNonTerminalGetting())) {
+                            queue.add(symbol.isNonTerminalGetting());
+                            nonTerminals.add(symbol.isNonTerminalGetting());
                         }
                     }
                 }
@@ -451,7 +453,7 @@ public class Optimization {
 
         Set<Production> productions = new LinkedHashSet<>();
         for (Production production : grammar.getProductions()) {
-            if (terminals.contains(production.getLhs()))
+            if (nonTerminals.contains(production.getLhs()))
                 productions.add(production);
         }
         Grammar newGrammar = new Grammar(grammar.getName(), grammar.getStartSymbol().getName());
@@ -473,28 +475,28 @@ public class Optimization {
 
         for (Production production : grammar.getProductions()) {
             List<Symbol> rhs = production.getRhs();
-            if (rhs.size() == 2 && (rhs.get(0).getType() == Symbol.Type.TERM || rhs.get(1).getType() == Symbol.Type.TERM)) {
+            if (rhs.size() == 2 && (rhs.get(0).isTerminal() || rhs.get(1).isTerminal())) {
                 List<Symbol> newRhs = new ArrayList<>();
-                if (rhs.get(0).getType() == Symbol.Type.TERM) {
+                if (rhs.get(0).isTerminal()) {
                     NonTerminal nt = new NonTerminal(rhs.get(0).getName().toUpperCase() + "'");
                     newGrammar.addNonTerminals(nt);
                     List<Symbol> nrhs = new LinkedList<>();
                     nrhs.add(rhs.get(0));
                     Production np = new Production(nt, nrhs);
                     newGrammar.addProduction(np);
-                    newRhs.add(nt);
+                    newRhs.add(Symbol.of(nt));
                 } else {
                     newRhs.add(rhs.get(0));
                 }
 
-                if (rhs.get(1).getType() == Symbol.Type.TERM) {
+                if (rhs.get(1).isTerminal()) {
                     NonTerminal nt = new NonTerminal(rhs.get(1).getName().toUpperCase() + "'");
                     newGrammar.addNonTerminals(nt);
                     List<Symbol> nrhs = new LinkedList<>();
                     nrhs.add(rhs.get(1));
                     Production np = new Production(nt, nrhs);
                     newGrammar.addProduction(np);
-                    newRhs.add(nt);
+                    newRhs.add(Symbol.of(nt));
                 } else {
                     newRhs.add(rhs.get(1));
                 }
@@ -510,7 +512,7 @@ public class Optimization {
     public static Grammar conversionToChomskyNormalForm(Grammar grammar) {
         boolean isRightStartSymbol = false;
         for (Production production : grammar.getProductions()) {
-            if (production.getRhs().contains(grammar.getStartSymbol())) {
+            if (production.getRhs().contains(Symbol.of(grammar.getStartSymbol()))) {
                 isRightStartSymbol = true;
                 break;
             }
@@ -522,7 +524,7 @@ public class Optimization {
             nonTerminals.add(nonTerminal);
             newGrammar.addNonTerminals(nonTerminals.toArray(NonTerminal[]::new));
             newGrammar.addTerminals(grammar.getTerminals().toArray(Terminal[]::new));
-            newGrammar.addProduction(nonTerminal, grammar.getStartSymbol());
+            newGrammar.addProduction(nonTerminal, Symbol.of(grammar.getStartSymbol()));
             for (Production production : grammar.getProductions()) {
                 newGrammar.addProduction(production);
             }
@@ -564,20 +566,12 @@ public class Optimization {
     }
 
     private static class Pair<T, S> {
-        private T first;
-        private S second;
+        private final T first;
+        private final S second;
 
         public Pair(T first, S second) {
             this.first = first;
             this.second = second;
-        }
-
-        public T getFirst() {
-            return first;
-        }
-
-        public S getSecond() {
-            return second;
         }
 
         @Override

@@ -3,12 +3,31 @@
  */
 package ic7cc.ovchinnikov.lab2;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import ic7cc.ovchinnikov.lab2.model.Grammar;
+import ic7cc.ovchinnikov.lab2.optimization.Optimization;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.io.IOException;
+import java.nio.file.Paths;
 
 public class AppTest {
-    @Test
-    public void testAppHasAGreeting() {
 
+    private static final ObjectMapper mapper = new ObjectMapper()
+            .enable(SerializationFeature.INDENT_OUTPUT);
+
+    @Test
+    public void testBuildNormalFormChomsky() throws IOException {
+        System.out.println("Before:");
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_conversion_to_chomsky_1.json").toFile(), Grammar.class);
+
+        System.out.println(grammar);
+
+        Grammar resultGrammar = Optimization.conversionToChomskyNormalForm(grammar);
+
+        System.out.println(resultGrammar);
+
+        mapper.writeValue(Paths.get("grammar/grammar_conversion_to_chomsky_1.json").toFile(), resultGrammar);
     }
 }

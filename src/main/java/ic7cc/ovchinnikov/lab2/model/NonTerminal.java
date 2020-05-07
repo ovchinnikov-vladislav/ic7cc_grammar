@@ -1,16 +1,18 @@
 package ic7cc.ovchinnikov.lab2.model;
 
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
-import lombok.ToString;
 
 import java.util.Objects;
 
 @Getter
-public class NonTerminal extends Symbol {
+public class NonTerminal {
 
-    public NonTerminal(String name) {
-        super(name, Type.NON_TERM);
+    private final String name;
+
+    @JsonCreator
+    public NonTerminal(@JsonProperty("name") String name) {
+        this.name = name;
     }
 
     @Override
@@ -18,19 +20,18 @@ public class NonTerminal extends Symbol {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NonTerminal nonTerminal = (NonTerminal) o;
-        return Objects.equals(getName(), nonTerminal.getName()) &&
-                getType() == nonTerminal.getType();
+        return Objects.equals(name, nonTerminal.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getType());
+        return Objects.hash(name);
     }
 
     @Override
     public String toString() {
         return "NonTerminal{" +
-                "name='" + getName() + '\'' +
+                "name='" + name + '\'' +
                 '}';
     }
 }

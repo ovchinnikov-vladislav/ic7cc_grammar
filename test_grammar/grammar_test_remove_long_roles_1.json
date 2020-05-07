@@ -1,0 +1,77 @@
+{
+  "name" : "Test Removing Long Rules",
+  "startSymbol" : {
+    "name" : "S"
+  },
+  "terminals" : [ {
+    "name" : "a",
+    "spell" : "a"
+  }, {
+    "name" : "c",
+    "spell" : "c"
+  }, {
+    "name" : "d",
+    "spell" : "d"
+  }, {
+    "name" : "e",
+    "spell" : "e"
+  }, {
+    "name" : "f",
+    "spell" : "f"
+  } ],
+  "nonTerminals" : [ {
+    "name" : "S"
+  }, {
+    "name" : "A"
+  }, {
+    "name" : "B"
+  } ],
+  "productions" : [ {
+    "lhs" : {
+      "name" : "S"
+    },
+    "rhs" : [ {
+      "name" : "A",
+      "type" : "nonterm"
+    }, {
+      "name" : "B",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    }, {
+      "name" : "B",
+      "type" : "nonterm"
+    }, {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
+    }, {
+      "name" : "B",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "B"
+    },
+    "rhs" : [ {
+      "name" : "d",
+      "spell" : "d",
+      "type" : "term"
+    }, {
+      "name" : "e",
+      "spell" : "e",
+      "type" : "term"
+    }, {
+      "name" : "f",
+      "spell" : "f",
+      "type" : "term"
+    } ]
+  } ]
+}
