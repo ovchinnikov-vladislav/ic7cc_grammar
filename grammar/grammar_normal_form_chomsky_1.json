@@ -1,7 +1,7 @@
 {
   "name" : "Test Chomsky",
   "startSymbol" : {
-    "name" : "S'"
+    "name" : "S_NEW_START"
   },
   "terminals" : [ {
     "name" : "a",
@@ -11,34 +11,23 @@
     "spell" : "b"
   } ],
   "nonTerminals" : [ {
-    "name" : "S'"
+    "name" : "S_NEW_START"
+  }, {
+    "name" : "S"
   }, {
     "name" : "A"
   }, {
     "name" : "B"
   }, {
-    "name" : "S"
+    "name" : "A0"
   }, {
     "name" : "S0"
   }, {
-    "name" : "A0"
-  }, {
-    "name" : "A'"
+    "name" : "A_MST"
   } ],
   "productions" : [ {
     "lhs" : {
-      "name" : "B"
-    },
-    "rhs" : [ {
-      "name" : "A",
-      "type" : "nonterm"
-    }, {
-      "name" : "S",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "A'"
+      "name" : "A"
     },
     "rhs" : [ {
       "name" : "a",
@@ -47,33 +36,11 @@
     } ]
   }, {
     "lhs" : {
-      "name" : "S"
+      "name" : "B"
     },
     "rhs" : [ {
-      "name" : "A'",
-      "type" : "nonterm"
-    }, {
-      "name" : "S0",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "S0"
-    },
-    "rhs" : [ {
-      "name" : "A",
-      "type" : "nonterm"
-    }, {
-      "name" : "B",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "A"
-    },
-    "rhs" : [ {
-      "name" : "a",
-      "spell" : "a",
+      "name" : "b",
+      "spell" : "b",
       "type" : "term"
     } ]
   }, {
@@ -114,16 +81,27 @@
       "name" : "B"
     },
     "rhs" : [ {
-      "name" : "b",
-      "spell" : "b",
+      "name" : "A",
+      "type" : "nonterm"
+    }, {
+      "name" : "S",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A_MST"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
       "type" : "term"
     } ]
   }, {
     "lhs" : {
-      "name" : "S'"
+      "name" : "S"
     },
     "rhs" : [ {
-      "name" : "A'",
+      "name" : "A_MST",
       "type" : "nonterm"
     }, {
       "name" : "S0",
@@ -131,13 +109,35 @@
     } ]
   }, {
     "lhs" : {
-      "name" : "S'"
+      "name" : "S0"
+    },
+    "rhs" : [ {
+      "name" : "A",
+      "type" : "nonterm"
+    }, {
+      "name" : "B",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S_NEW_START"
     },
     "rhs" : [ {
       "name" : "B",
       "type" : "nonterm"
     }, {
       "name" : "A",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S_NEW_START"
+    },
+    "rhs" : [ {
+      "name" : "A_MST",
+      "type" : "nonterm"
+    }, {
+      "name" : "S0",
       "type" : "nonterm"
     } ]
   } ]

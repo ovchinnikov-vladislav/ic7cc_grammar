@@ -21,7 +21,7 @@ public class Symbol {
     private final Type type;
 
     @JsonCreator
-    public Symbol(@JsonProperty("name") String name, @JsonProperty("spell") String spell, @JsonProperty("type") Type type) {
+    private Symbol(@JsonProperty("name") String name, @JsonProperty("spell") String spell, @JsonProperty("type") Type type) {
         this.name = name;
         this.spell = spell;
         this.type = type;

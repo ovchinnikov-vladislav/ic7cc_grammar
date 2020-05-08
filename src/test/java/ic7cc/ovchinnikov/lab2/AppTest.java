@@ -6,28 +6,140 @@ package ic7cc.ovchinnikov.lab2;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import ic7cc.ovchinnikov.lab2.model.Grammar;
-import ic7cc.ovchinnikov.lab2.optimization.Optimization;
+import ic7cc.ovchinnikov.lab2.optimization.GrammarWithLeftFactorizationBuilder;
+import ic7cc.ovchinnikov.lab2.optimization.GrammarWithoutLeftRecursionBuilder;
+import ic7cc.ovchinnikov.lab2.optimization.ChomskyNormalGrammarBuilder;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.logging.Logger;
 
 public class AppTest {
+
+    private static final Logger log = Logger.getLogger(AppTest.class.toString());
 
     private static final ObjectMapper mapper = new ObjectMapper()
             .enable(SerializationFeature.INDENT_OUTPUT);
 
     @Test
-    public void testBuildNormalFormChomsky() throws IOException {
-        System.out.println("Before:");
-        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_conversion_to_chomsky_1.json").toFile(), Grammar.class);
+    public void testBuildNormalFormChomsky1() throws IOException {
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_non_normal_form_chomsky_1.json").toFile(), Grammar.class);
 
-        System.out.println(grammar);
+        Grammar resultGrammar = ChomskyNormalGrammarBuilder.build(grammar);
 
-        Grammar resultGrammar = Optimization.conversionToChomskyNormalForm(grammar);
+        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
 
-        System.out.println(resultGrammar);
+        mapper.writeValue(Paths.get("grammar/grammar_normal_form_chomsky_1.json").toFile(), resultGrammar);
+    }
 
-        mapper.writeValue(Paths.get("grammar/grammar_conversion_to_chomsky_1.json").toFile(), resultGrammar);
+    @Test
+    public void testBuildNormalFormChomsky2() throws IOException {
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_non_normal_form_chomsky_2.json").toFile(), Grammar.class);
+
+        Grammar resultGrammar = ChomskyNormalGrammarBuilder.build(grammar);
+
+        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+
+        mapper.writeValue(Paths.get("grammar/grammar_normal_form_chomsky_2.json").toFile(), resultGrammar);
+    }
+
+    @Test
+    public void testBuildNormalFormChomsky3() throws IOException {
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_non_normal_form_chomsky_3.json").toFile(), Grammar.class);
+
+        Grammar resultGrammar = ChomskyNormalGrammarBuilder.build(grammar);
+
+        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+
+        mapper.writeValue(Paths.get("grammar/grammar_normal_form_chomsky_3.json").toFile(), resultGrammar);
+    }
+
+    @Test
+    public void testLeftRecursionEliminationG0() throws IOException {
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/g0.json").toFile(), Grammar.class);
+
+        Grammar resultGrammar = GrammarWithoutLeftRecursionBuilder.build(grammar);
+
+        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+
+        mapper.writeValue(Paths.get("grammar/g0.json").toFile(), resultGrammar);
+    }
+
+    @Test
+    public void testLeftRecursionEliminationS0() throws IOException {
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/s0.json").toFile(), Grammar.class);
+
+        Grammar resultGrammar = GrammarWithoutLeftRecursionBuilder.build(grammar);
+
+        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+
+        mapper.writeValue(Paths.get("grammar/s0.json").toFile(), resultGrammar);
+    }
+
+    @Test
+    public void testLeftFactorization() throws IOException {
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_without_left_factorization_1.json").toFile(), Grammar.class);
+
+        Grammar resultGrammar = GrammarWithLeftFactorizationBuilder.leftFactorization(grammar);
+
+        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+
+        mapper.writeValue(Paths.get("grammar/grammar_with_left_factorization_1.json").toFile(), resultGrammar);
+    }
+
+    @Test
+    public void testRemovingChainRules() throws IOException {
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_with_chain_rules_1.json").toFile(), Grammar.class);
+
+        Grammar resultGrammar = ChomskyNormalGrammarBuilder.removeChainRules(grammar);
+
+        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+
+        mapper.writeValue(Paths.get("grammar/grammar_without_chain_rules_1.json").toFile(), resultGrammar);
+    }
+
+    @Test
+    public void testRemovingMeetingSeveralTerminalsRules() throws IOException {
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_with_meeting_several_terminals_1.json").toFile(), Grammar.class);
+
+        Grammar resultGrammar = ChomskyNormalGrammarBuilder.removeMeetingSeveralTerminals(grammar);
+
+        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+
+        mapper.writeValue(Paths.get("grammar/grammar_without_meeting_several_terminals_1.json").toFile(), resultGrammar);
+    }
+
+    @Test
+    public void testRemovingLongRules() throws IOException {
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_with_long_rules_1.json").toFile(), Grammar.class);
+
+        Grammar resultGrammar = ChomskyNormalGrammarBuilder.removeLongRules(grammar);
+
+        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+
+        mapper.writeValue(Paths.get("grammar/grammar_without_long_rules_1.json").toFile(), resultGrammar);
+    }
+
+    @Test
+    public void testRemovingUnreachableNonTerminal() throws IOException {
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_with_unreachable_non_terminal_1.json").toFile(), Grammar.class);
+
+        Grammar resultGrammar = ChomskyNormalGrammarBuilder.removeUnreachableNonTerminal(grammar);
+
+        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+
+        mapper.writeValue(Paths.get("grammar/grammar_without_unreachable_non_terminal_1.json").toFile(), resultGrammar);
+    }
+
+    @Test
+    public void testRemovingUselessNonTerminal() throws IOException {
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_with_useless_non_terminal_1.json").toFile(), Grammar.class);
+
+        Grammar resultGrammar = ChomskyNormalGrammarBuilder.removeUselessCharacter(grammar);
+
+        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+
+        mapper.writeValue(Paths.get("grammar/grammar_without_useless_non_terminal_1.json").toFile(), resultGrammar);
     }
 }

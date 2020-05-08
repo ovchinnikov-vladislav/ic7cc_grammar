@@ -10,8 +10,8 @@ import java.util.*;
 public class Grammar {
 
     private final String name;
-    private final Set<Terminal> terminals;
-    private final Set<NonTerminal> nonTerminals;
+    private final LinkedHashSet<Terminal> terminals;
+    private final LinkedHashSet<NonTerminal> nonTerminals;
     private final Set<Production> productions;
     private final NonTerminal startSymbol;
 
@@ -25,8 +25,8 @@ public class Grammar {
     }
 
     @JsonCreator
-    public Grammar(@JsonProperty("name") String name, @JsonProperty("startSymbol") NonTerminal startSymbol,
-                   @JsonProperty("terminals") Set<Terminal> terminals, @JsonProperty("nonTerminals") Set<NonTerminal> nonTerminals,
+    private Grammar(@JsonProperty("name") String name, @JsonProperty("startSymbol") NonTerminal startSymbol,
+                   @JsonProperty("terminals") LinkedHashSet<Terminal> terminals, @JsonProperty("nonTerminals") LinkedHashSet<NonTerminal> nonTerminals,
                    @JsonProperty("productions") Set<Production> productions) {
         this.name = name;
         this.terminals = terminals;
@@ -82,6 +82,13 @@ public class Grammar {
         return productions.add(new Production(production.getLhs(), new LinkedList<>(production.getRhs())));
     }
 
+    public NonTerminal createNewNonTerminal(String name) {
+        if (nonTerminals.contains(new NonTerminal(name))) {
+            return createNewNonTerminal(name + "'");
+        }
+        return new NonTerminal(name);
+    }
+
     public boolean removeProduction(Production production) {
         return productions.remove(production);
     }
@@ -106,7 +113,7 @@ public class Grammar {
         return startSymbol;
     }
 
-    public Set<Production> findProductionsByLhs(Symbol lhs) {
+    public Set<Production> findProductionsByLhs(NonTerminal lhs) {
         Set<Production> resultProductions = new HashSet<>();
         for (Production production : productions) {
             if (production.getLhs().equals(lhs))
@@ -130,7 +137,7 @@ public class Grammar {
         for (Production production : productions) {
             productionString.append("\t\t").append(production.getLhs().getName()).append(" -> ");
             for (Symbol symbol : production.getRhs())
-                productionString.append(symbol.getName()).append(" ");
+                productionString.append(symbol.isTerminal() ? symbol.getSpell() : symbol.getName()).append(" ");
             productionString.append("\n");
         }
 

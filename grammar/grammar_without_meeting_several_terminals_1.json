@@ -1,0 +1,115 @@
+{
+  "name" : "Remove Meeting Several Terminals",
+  "startSymbol" : {
+    "name" : "A"
+  },
+  "terminals" : [ {
+    "name" : "a",
+    "spell" : "a"
+  }, {
+    "name" : "b",
+    "spell" : "b"
+  }, {
+    "name" : "c",
+    "spell" : "c"
+  }, {
+    "name" : "d",
+    "spell" : "d"
+  } ],
+  "nonTerminals" : [ {
+    "name" : "A"
+  }, {
+    "name" : "B"
+  }, {
+    "name" : "C"
+  }, {
+    "name" : "A_MST"
+  }, {
+    "name" : "B_MST"
+  }, {
+    "name" : "C_MST"
+  }, {
+    "name" : "D_MST"
+  } ],
+  "productions" : [ {
+    "lhs" : {
+      "name" : "A_MST"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "A_MST",
+      "type" : "nonterm"
+    }, {
+      "name" : "A_MST",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "B_MST"
+    },
+    "rhs" : [ {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "B"
+    },
+    "rhs" : [ {
+      "name" : "B_MST",
+      "type" : "nonterm"
+    }, {
+      "name" : "C",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "A_MST",
+      "type" : "nonterm"
+    }, {
+      "name" : "B",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "C_MST"
+    },
+    "rhs" : [ {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "D_MST"
+    },
+    "rhs" : [ {
+      "name" : "d",
+      "spell" : "d",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "C"
+    },
+    "rhs" : [ {
+      "name" : "C_MST",
+      "type" : "nonterm"
+    }, {
+      "name" : "D_MST",
+      "type" : "nonterm"
+    } ]
+  } ]
+}

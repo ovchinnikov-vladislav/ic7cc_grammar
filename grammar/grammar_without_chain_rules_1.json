@@ -1,49 +1,28 @@
 {
-  "name" : "Remove Eps Rules",
+  "name" : "Remove Chain Rules",
   "startSymbol" : {
-    "name" : "S"
+    "name" : "A"
   },
   "terminals" : [ {
-    "name" : "EPSILON",
-    "spell" : ""
-  }, {
     "name" : "a",
     "spell" : "a"
   }, {
+    "name" : "b",
+    "spell" : "b"
+  }, {
     "name" : "c",
     "spell" : "c"
-  }, {
-    "name" : "d",
-    "spell" : "d"
   } ],
   "nonTerminals" : [ {
-    "name" : "S"
-  }, {
     "name" : "A"
   }, {
     "name" : "B"
   }, {
     "name" : "C"
+  }, {
+    "name" : "D"
   } ],
   "productions" : [ {
-    "lhs" : {
-      "name" : "S"
-    },
-    "rhs" : [ {
-      "name" : "A",
-      "type" : "nonterm"
-    }, {
-      "name" : "B",
-      "type" : "nonterm"
-    }, {
-      "name" : "C",
-      "type" : "nonterm"
-    }, {
-      "name" : "d",
-      "spell" : "d",
-      "type" : "term"
-    } ]
-  }, {
     "lhs" : {
       "name" : "A"
     },
@@ -54,22 +33,22 @@
     } ]
   }, {
     "lhs" : {
-      "name" : "A"
+      "name" : "B"
     },
     "rhs" : [ {
-      "name" : "EPSILON",
-      "spell" : "",
+      "name" : "b",
+      "spell" : "b",
       "type" : "term"
     } ]
   }, {
     "lhs" : {
-      "name" : "B"
+      "name" : "C"
     },
     "rhs" : [ {
-      "name" : "A",
+      "name" : "D",
       "type" : "nonterm"
     }, {
-      "name" : "C",
+      "name" : "D",
       "type" : "nonterm"
     } ]
   }, {
@@ -83,11 +62,51 @@
     } ]
   }, {
     "lhs" : {
-      "name" : "C"
+      "name" : "A"
     },
     "rhs" : [ {
-      "name" : "EPSILON",
-      "spell" : "",
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "B"
+    },
+    "rhs" : [ {
+      "name" : "D",
+      "type" : "nonterm"
+    }, {
+      "name" : "D",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "B"
+    },
+    "rhs" : [ {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "D",
+      "type" : "nonterm"
+    }, {
+      "name" : "D",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "c",
+      "spell" : "c",
       "type" : "term"
     } ]
   } ]

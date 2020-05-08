@@ -1,0 +1,101 @@
+{
+  "name" : "G0",
+  "startSymbol" : {
+    "name" : "A"
+  },
+  "terminals" : [ {
+    "name" : "a",
+    "spell" : "a"
+  }, {
+    "name" : "b",
+    "spell" : "b"
+  }, {
+    "name" : "d",
+    "spell" : "d"
+  } ],
+  "nonTerminals" : [ {
+    "name" : "A"
+  }, {
+    "name" : "C"
+  }, {
+    "name" : "D"
+  }, {
+    "name" : "A_LF"
+  }, {
+    "name" : "A_LF'"
+  } ],
+  "productions" : [ {
+    "lhs" : {
+      "name" : "A_LF'"
+    },
+    "rhs" : [ {
+      "name" : "EPSILON",
+      "spell" : "",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    }, {
+      "name" : "A_LF'",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A_LF"
+    },
+    "rhs" : [ {
+      "name" : "d",
+      "spell" : "d",
+      "type" : "term"
+    }, {
+      "name" : "C",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A_LF'"
+    },
+    "rhs" : [ {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    }, {
+      "name" : "A_LF",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A_LF"
+    },
+    "rhs" : [ {
+      "name" : "D",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A_LF"
+    },
+    "rhs" : [ {
+      "name" : "C",
+      "type" : "nonterm"
+    }, {
+      "name" : "D",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A_LF'"
+    },
+    "rhs" : [ {
+      "name" : "d",
+      "spell" : "d",
+      "type" : "term"
+    } ]
+  } ]
+}

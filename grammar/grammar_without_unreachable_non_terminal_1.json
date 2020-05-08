@@ -1,0 +1,70 @@
+{
+  "name" : "Remove Unreachable Non Terminal",
+  "startSymbol" : {
+    "name" : "S"
+  },
+  "terminals" : [ {
+    "name" : "c",
+    "spell" : "c"
+  } ],
+  "nonTerminals" : [ {
+    "name" : "S"
+  }, {
+    "name" : "A"
+  }, {
+    "name" : "B"
+  }, {
+    "name" : "C"
+  }, {
+    "name" : "D"
+  }, {
+    "name" : "E"
+  }, {
+    "name" : "F"
+  }, {
+    "name" : "G"
+  } ],
+  "productions" : [ {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "E",
+      "type" : "nonterm"
+    }, {
+      "name" : "F",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "C"
+    },
+    "rhs" : [ {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S"
+    },
+    "rhs" : [ {
+      "name" : "A",
+      "type" : "nonterm"
+    }, {
+      "name" : "B",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S"
+    },
+    "rhs" : [ {
+      "name" : "C",
+      "type" : "nonterm"
+    }, {
+      "name" : "D",
+      "type" : "nonterm"
+    } ]
+  } ]
+}

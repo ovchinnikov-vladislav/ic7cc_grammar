@@ -1,0 +1,107 @@
+{
+  "name" : "Test Removing Long Rules",
+  "startSymbol" : {
+    "name" : "S"
+  },
+  "terminals" : [ {
+    "name" : "a",
+    "spell" : "a"
+  }, {
+    "name" : "c",
+    "spell" : "c"
+  }, {
+    "name" : "d",
+    "spell" : "d"
+  }, {
+    "name" : "e",
+    "spell" : "e"
+  }, {
+    "name" : "f",
+    "spell" : "f"
+  } ],
+  "nonTerminals" : [ {
+    "name" : "S"
+  }, {
+    "name" : "A"
+  }, {
+    "name" : "B"
+  }, {
+    "name" : "B0"
+  }, {
+    "name" : "A0"
+  }, {
+    "name" : "A1"
+  } ],
+  "productions" : [ {
+    "lhs" : {
+      "name" : "B"
+    },
+    "rhs" : [ {
+      "name" : "d",
+      "spell" : "d",
+      "type" : "term"
+    }, {
+      "name" : "B0",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "B0"
+    },
+    "rhs" : [ {
+      "name" : "e",
+      "spell" : "e",
+      "type" : "term"
+    }, {
+      "name" : "f",
+      "spell" : "f",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    }, {
+      "name" : "A0",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A0"
+    },
+    "rhs" : [ {
+      "name" : "B",
+      "type" : "nonterm"
+    }, {
+      "name" : "A1",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A1"
+    },
+    "rhs" : [ {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
+    }, {
+      "name" : "B",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S"
+    },
+    "rhs" : [ {
+      "name" : "A",
+      "type" : "nonterm"
+    }, {
+      "name" : "B",
+      "type" : "nonterm"
+    } ]
+  } ]
+}

@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.util.Objects;
 
 @Getter
-public class NonTerminal {
+public class NonTerminal implements Comparable<NonTerminal> {
 
     private final String name;
 
@@ -33,5 +33,10 @@ public class NonTerminal {
         return "NonTerminal{" +
                 "name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(NonTerminal o) {
+        return this.name.compareTo(o.name);
     }
 }

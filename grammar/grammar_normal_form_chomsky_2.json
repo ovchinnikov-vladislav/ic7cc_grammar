@@ -1,0 +1,141 @@
+{
+  "name" : "Test Chomsky",
+  "startSymbol" : {
+    "name" : "S''"
+  },
+  "terminals" : [ {
+    "name" : "a",
+    "spell" : "a"
+  }, {
+    "name" : "b",
+    "spell" : "b"
+  }, {
+    "name" : "EPSILON",
+    "spell" : ""
+  } ],
+  "nonTerminals" : [ {
+    "name" : "S''"
+  }, {
+    "name" : "U"
+  }, {
+    "name" : "S0"
+  }, {
+    "name" : "S1"
+  }, {
+    "name" : "B'"
+  }, {
+    "name" : "A'"
+  } ],
+  "productions" : [ {
+    "lhs" : {
+      "name" : "S''"
+    },
+    "rhs" : [ {
+      "name" : "EPSILON",
+      "spell" : "",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S0"
+    },
+    "rhs" : [ {
+      "name" : "U",
+      "type" : "nonterm"
+    }, {
+      "name" : "S1",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S1"
+    },
+    "rhs" : [ {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "B'"
+    },
+    "rhs" : [ {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S1"
+    },
+    "rhs" : [ {
+      "name" : "B'",
+      "type" : "nonterm"
+    }, {
+      "name" : "U",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A'"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "U"
+    },
+    "rhs" : [ {
+      "name" : "B'",
+      "type" : "nonterm"
+    }, {
+      "name" : "A'",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "U"
+    },
+    "rhs" : [ {
+      "name" : "A'",
+      "type" : "nonterm"
+    }, {
+      "name" : "S0",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S0"
+    },
+    "rhs" : [ {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S0"
+    },
+    "rhs" : [ {
+      "name" : "B'",
+      "type" : "nonterm"
+    }, {
+      "name" : "U",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S''"
+    },
+    "rhs" : [ {
+      "name" : "A'",
+      "type" : "nonterm"
+    }, {
+      "name" : "S0",
+      "type" : "nonterm"
+    } ]
+  } ]
+}

@@ -1,0 +1,42 @@
+{
+  "name" : "Remove Useless Character",
+  "startSymbol" : {
+    "name" : "S"
+  },
+  "terminals" : [ {
+    "name" : "a",
+    "spell" : "a"
+  }, {
+    "name" : "c",
+    "spell" : "c"
+  } ],
+  "nonTerminals" : [ {
+    "name" : "S"
+  }, {
+    "name" : "A"
+  }, {
+    "name" : "D"
+  } ],
+  "productions" : [ {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S"
+    },
+    "rhs" : [ {
+      "name" : "A",
+      "type" : "nonterm"
+    }, {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
+    } ]
+  } ]
+}

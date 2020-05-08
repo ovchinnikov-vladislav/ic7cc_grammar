@@ -15,16 +15,15 @@ public class App {
     public static void main(String[] args) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        mapper.writeValue(Paths.get("test_grammar/grammar_left_factorization_1.json").toFile(), testLeftFactorization());
-        mapper.writeValue(Paths.get("test_grammar/grammar_remove_meeting_several_terminals_1.json").toFile(), testRemoveMeetingSeveralTerminals());
-        mapper.writeValue(Paths.get("test_grammar/grammar_remove_unreachable_non_terminal_1.json").toFile(), testRemoveUnreachableNonTerminal());
-        mapper.writeValue(Paths.get("test_grammar/grammar_remove_useless_character_1.json").toFile(), testRemoveUselessCharacter());
-        mapper.writeValue(Paths.get("test_grammar/grammar_remove_chain_rules_1.json").toFile(), testRemoveChainRules());
-        mapper.writeValue(Paths.get("test_grammar/grammar_remove_eps_rules_1.json").toFile(), testRemoveEpsRules());
-        mapper.writeValue(Paths.get("test_grammar/grammar_conversion_to_chomsky_1.json").toFile(), testConversionToChomskyNormalForm1());
-        mapper.writeValue(Paths.get("test_grammar/grammar_conversion_to_chomsky_2.json").toFile(), testConversionToChomskyNormalForm2());
-        mapper.writeValue(Paths.get("test_grammar/grammar_conversion_to_chomsky_3.json").toFile(), testConversionToChomskyNormalForm3());
-        mapper.writeValue(Paths.get("test_grammar/grammar_test_remove_long_roles_1.json").toFile(), testRemovingLongRules());
+        mapper.writeValue(Paths.get("test_grammar/grammar_without_left_factorization_1.json").toFile(), testLeftFactorization());
+        mapper.writeValue(Paths.get("test_grammar/grammar_with_meeting_several_terminals_1.json").toFile(), testRemoveMeetingSeveralTerminals());
+        mapper.writeValue(Paths.get("test_grammar/grammar_with_unreachable_non_terminal_1.json").toFile(), testRemoveUnreachableNonTerminal());
+        mapper.writeValue(Paths.get("test_grammar/grammar_with_useless_non_terminal_1.json").toFile(), testRemoveUselessCharacter());
+        mapper.writeValue(Paths.get("test_grammar/grammar_with_chain_rules_1.json").toFile(), testRemoveChainRules());
+        mapper.writeValue(Paths.get("test_grammar/grammar_non_normal_form_chomsky_1.json").toFile(), testConversionToChomskyNormalForm1());
+        mapper.writeValue(Paths.get("test_grammar/grammar_non_normal_form_chomsky_2.json").toFile(), testConversionToChomskyNormalForm2());
+        mapper.writeValue(Paths.get("test_grammar/grammar_non_normal_form_chomsky_3.json").toFile(), testConversionToChomskyNormalForm3());
+        mapper.writeValue(Paths.get("test_grammar/grammar_with_long_rules_1.json").toFile(), testRemovingLongRules());
         mapper.writeValue(Paths.get("test_grammar/g0.json").toFile(), G0());
         mapper.writeValue(Paths.get("test_grammar/s0.json").toFile(), S0());
     }
@@ -128,30 +127,6 @@ public class App {
 
         return grammar;
     }
-    public static Grammar testRemoveEpsRules() {
-        Grammar grammar = new Grammar("Remove Eps Rules", "S");
-        NonTerminal nonTerminalS = grammar.getStartSymbol();
-        NonTerminal nonTerminalA = new NonTerminal("A");
-        NonTerminal nonTerminalB = new NonTerminal("B");
-        NonTerminal nonTerminalC = new NonTerminal("C");
-
-        Terminal terminalEps = Terminal.EPSILON;
-        Terminal terminalA = new Terminal("a", "a");
-        Terminal terminalC = new Terminal("c", "c");
-        Terminal terminalD = new Terminal("d", "d");
-
-
-        grammar.addNonTerminals(nonTerminalS, nonTerminalA, nonTerminalB, nonTerminalC);
-        grammar.addTerminals(terminalEps, terminalA, terminalC, terminalD);
-        grammar.addProduction(nonTerminalS, Symbol.of(nonTerminalA), Symbol.of(nonTerminalB), Symbol.of(nonTerminalC), Symbol.of(terminalD));
-        grammar.addProduction(nonTerminalA, Symbol.of(terminalA));
-        grammar.addProduction(nonTerminalA, Symbol.of(terminalEps));
-        grammar.addProduction(nonTerminalB, Symbol.of(nonTerminalA), Symbol.of(nonTerminalC));
-        grammar.addProduction(nonTerminalC, Symbol.of(terminalC));
-        grammar.addProduction(nonTerminalC, Symbol.of(terminalEps));
-
-        return grammar;
-    }
     public static Grammar testConversionToChomskyNormalForm1() {
         Grammar grammar = new Grammar("Test Chomsky", "S");
         NonTerminal nonTerminalS = grammar.getStartSymbol();
@@ -245,7 +220,7 @@ public class App {
         NonTerminal nonTerminalF = new NonTerminal("F");
 
         grammar.addTerminals(ident, add, mul, lparen, rparen);
-        grammar.addNonTerminals(nonTerminalE, nonTerminalT, nonTerminalF);
+        grammar.addNonTerminals(nonTerminalT, nonTerminalF);
         grammar.addProduction(nonTerminalE, Symbol.of(nonTerminalE), Symbol.of(add), Symbol.of(nonTerminalT));
         grammar.addProduction(nonTerminalE, Symbol.of(nonTerminalT));
         grammar.addProduction(nonTerminalT, Symbol.of(nonTerminalT), Symbol.of(mul), Symbol.of(nonTerminalF));
@@ -267,7 +242,7 @@ public class App {
         Terminal terminalEps = Terminal.EPSILON;
 
         grammar.addTerminals(terminalA, terminalB, terminalC, terminalD, terminalEps);
-        grammar.addNonTerminals(nonTerminalS, nonTerminalA);
+        grammar.addNonTerminals(nonTerminalA);
         grammar.addProduction(nonTerminalS, Symbol.of(nonTerminalA), Symbol.of(terminalA));
         grammar.addProduction(nonTerminalS, Symbol.of(terminalB));
         grammar.addProduction(nonTerminalA, Symbol.of(nonTerminalA), Symbol.of(terminalC));
