@@ -9,9 +9,6 @@
   }, {
     "name" : "b",
     "spell" : "b"
-  }, {
-    "name" : "EPSILON",
-    "spell" : ""
   } ],
   "nonTerminals" : [ {
     "name" : "S''"
@@ -32,8 +29,37 @@
     },
     "rhs" : [ {
       "name" : "EPSILON",
-      "spell" : "",
+      "spell" : "eps",
+      "type" : "eps"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "B'"
+    },
+    "rhs" : [ {
+      "name" : "b",
+      "spell" : "b",
       "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A'"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "U"
+    },
+    "rhs" : [ {
+      "name" : "B'",
+      "type" : "nonterm"
+    }, {
+      "name" : "A'",
+      "type" : "nonterm"
     } ]
   }, {
     "lhs" : {
@@ -57,15 +83,6 @@
     } ]
   }, {
     "lhs" : {
-      "name" : "B'"
-    },
-    "rhs" : [ {
-      "name" : "b",
-      "spell" : "b",
-      "type" : "term"
-    } ]
-  }, {
-    "lhs" : {
       "name" : "S1"
     },
     "rhs" : [ {
@@ -73,26 +90,6 @@
       "type" : "nonterm"
     }, {
       "name" : "U",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "A'"
-    },
-    "rhs" : [ {
-      "name" : "a",
-      "spell" : "a",
-      "type" : "term"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "U"
-    },
-    "rhs" : [ {
-      "name" : "B'",
-      "type" : "nonterm"
-    }, {
-      "name" : "A'",
       "type" : "nonterm"
     } ]
   }, {

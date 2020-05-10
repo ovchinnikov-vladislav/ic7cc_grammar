@@ -1,34 +1,50 @@
 package ic7cc.ovchinnikov.lab2.optimization;
 
 import ic7cc.ovchinnikov.lab2.model.*;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
-public class GrammarWithLeftFactorizationBuilder {
+@Slf4j
+public class GrammarWithLeftFactoringBuilder {
 
-    private static final Logger log = Logger.getLogger(GrammarWithLeftFactorizationBuilder.class);
-
-    /** Проведение левой факторизации
+    /**
+     * Проведение левой факторизации
+     *
      * @param grammar - грамматика
      * @return левофакторизованная грамматика
-     * */
-    public static Grammar leftFactorization(Grammar grammar) {
-        log.debug("Left Factorization");
-        log.debug("Input: " + grammar);
+     */
+    public static Grammar build(Grammar grammar) {
+        log.info("Left Factoring");
+        log.info("Input Grammar (building grammar with left factoring): {}", grammar);
+
+        Grammar newGrammar = leftFactoring(grammar);
+        log.info("Output Grammar (building grammar with left factoring): {}", newGrammar);
+        return newGrammar;
+    }
+
+    private static Grammar leftFactoring(Grammar grammar) {
+        log.info("Input Grammar (left factoring - iteration): {}", grammar);
         Grammar newGrammar = new Grammar(grammar.getName(), grammar.getStartSymbol().getName());
         newGrammar.addNonTerminals(grammar.getNonTerminals().toArray(NonTerminal[]::new));
         newGrammar.addTerminals(grammar.getTerminals().toArray(Terminal[]::new));
 
         // Есть ли возможность провести левую факторизацию?
-        boolean isPossibleLeftFactorization = true;
+        boolean isNotPossibleLeftFactoring = true;
         for (NonTerminal nonTerminal : grammar.getNonTerminals()) {
-            if (findAllPrefixOfNonTerminal(grammar, nonTerminal).size() > 0) {
-                isPossibleLeftFactorization = false;
+            Map<List<Symbol>, Set<Production>> map = findAllPrefixOfNonTerminal(grammar, nonTerminal);
+            if (map.size() > 0) {
+                isNotPossibleLeftFactoring = false;
+            } else {
+                // Переписываем все правила, в которых не требуется левая факторизация
+                Set<Production> productions = grammar.findProductionsByLhs(nonTerminal);
+                for (Production production : productions) {
+                    newGrammar.addProduction(production);
+                }
             }
         }
-        if (isPossibleLeftFactorization) {
-            log.debug("Grammar Result: " + grammar);
+        if (isNotPossibleLeftFactoring) {
+            log.info("Output Grammar (left factoring - iteration): {}", grammar);
             return grammar;
         }
 
@@ -56,10 +72,10 @@ public class GrammarWithLeftFactorizationBuilder {
                 // Проходимся по всем продукциям
                 for (Production production : grammar.getProductions()) {
                     // Если данная продукция не содержит данный префикс, то просто перенесем ее в новую грамматику
-                    if (!productions.contains(production)) {
+                    if (!productions.contains(production) && production.getLhs().equals(nonTerminal)) {
                         newGrammar.addProduction(production);
-                    // Иначе делаем проход по этой продукции и префиксу с целью выполнения левой факторизации
-                    } else {
+                        // Иначе делаем проход по этой продукции и префиксу с целью выполнения левой факторизации
+                    } else if (productions.contains(production)) {
                         // Итератор правой части продукции из грамматики
                         Iterator<Symbol> iteratorProdRhs = production.getRhs().iterator();
                         // Итератор префикса
@@ -68,20 +84,18 @@ public class GrammarWithLeftFactorizationBuilder {
                         // Если это первая итерации для нового правила, то создаем нетерминал, отличный от других
                         if (i == 0) {
                             i++;
-                            newNonTerminal = newGrammar.createNewNonTerminal(production.getLhs().getName() + "_LF");
+                            newNonTerminal = newGrammar.createNewNonTerminal(production.getLhs().getName());
                         }
                         // Пока символы в итераторе префикса и итераторе продукции есть, делать
-                        while (iteratorPrefix.hasNext()) {
-                            if (iteratorProdRhs.hasNext()) {
-                                Symbol symbolPrefix = iteratorPrefix.next();
-                                Symbol symbolProdRhs = iteratorProdRhs.next();
-                                // Символы префикса и символ продукции равны, то добавить в новое правило
-                                if (symbolPrefix.equals(symbolProdRhs))
-                                    newRhs.add(symbolPrefix);
+                        while (iteratorPrefix.hasNext() && iteratorProdRhs.hasNext()) {
+                            Symbol symbolPrefix = iteratorPrefix.next();
+                            Symbol symbolProdRhs = iteratorProdRhs.next();
+                            // Символы префикса и символ продукции равны, то добавить в новое правило
+                            if (symbolPrefix.equals(symbolProdRhs))
+                                newRhs.add(symbolPrefix);
                                 // иначе пошло отличие, завершить проход
-                                else
-                                    break;
-                            }
+                            else
+                                break;
                         }
                         List<Symbol> rhsNewProduction = new LinkedList<>();
                         // В итераторе продукции остались символы? Переписать.
@@ -96,14 +110,14 @@ public class GrammarWithLeftFactorizationBuilder {
                 }
             }
         }
-
         // Рекурсивно повторить левую факторизацию
-        return leftFactorization(newGrammar);
+        return leftFactoring(newGrammar);
     }
 
     /**
      * Поиск префиксов
-     * @param grammar - грамматика
+     *
+     * @param grammar     - грамматика
      * @param nonTerminal - нетерминал, для которого требуется найти все префиксы из правой части
      * @return мапа ключ - префикс, значение - множество продукций, соответствующих данному префиксу
      */

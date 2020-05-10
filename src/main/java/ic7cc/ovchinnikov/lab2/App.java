@@ -15,20 +15,45 @@ public class App {
     public static void main(String[] args) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        mapper.writeValue(Paths.get("test_grammar/grammar_without_left_factorization_1.json").toFile(), testLeftFactorization());
+        mapper.writeValue(Paths.get("test_grammar/grammar_without_left_factoring_1.json").toFile(), testLeftfactoring());
         mapper.writeValue(Paths.get("test_grammar/grammar_with_meeting_several_terminals_1.json").toFile(), testRemoveMeetingSeveralTerminals());
         mapper.writeValue(Paths.get("test_grammar/grammar_with_unreachable_non_terminal_1.json").toFile(), testRemoveUnreachableNonTerminal());
         mapper.writeValue(Paths.get("test_grammar/grammar_with_useless_non_terminal_1.json").toFile(), testRemoveUselessCharacter());
         mapper.writeValue(Paths.get("test_grammar/grammar_with_chain_rules_1.json").toFile(), testRemoveChainRules());
         mapper.writeValue(Paths.get("test_grammar/grammar_non_normal_form_chomsky_1.json").toFile(), testConversionToChomskyNormalForm1());
         mapper.writeValue(Paths.get("test_grammar/grammar_non_normal_form_chomsky_2.json").toFile(), testConversionToChomskyNormalForm2());
-        mapper.writeValue(Paths.get("test_grammar/grammar_non_normal_form_chomsky_3.json").toFile(), testConversionToChomskyNormalForm3());
         mapper.writeValue(Paths.get("test_grammar/grammar_with_long_rules_1.json").toFile(), testRemovingLongRules());
         mapper.writeValue(Paths.get("test_grammar/g0.json").toFile(), G0());
         mapper.writeValue(Paths.get("test_grammar/s0.json").toFile(), S0());
+
+
     }
 
-    public static Grammar testLeftFactorization() {
+    public static Grammar testLeftfactoring1() {
+        Grammar grammar = new Grammar("TEST", "S");
+        Terminal terminalA = new Terminal("a", "a");
+        Terminal terminalB = new Terminal("b", "b");
+        Terminal terminalC = new Terminal("c", "c");
+        Terminal terminalD = new Terminal("d", "d");
+        NonTerminal nonTerminalS = new NonTerminal("S");
+        NonTerminal nonTerminalA = new NonTerminal("A");
+        NonTerminal nonTerminalC = new NonTerminal("C");
+        NonTerminal nonTerminalD = new NonTerminal("D");
+        grammar.addTerminals(terminalA, terminalB, terminalD);
+        grammar.addNonTerminals(nonTerminalS, nonTerminalC, nonTerminalD);
+
+        grammar.addProduction(grammar.getStartSymbol(), Symbol.of(terminalA), Symbol.of(terminalB), Symbol.of(terminalC));
+        grammar.addProduction(grammar.getStartSymbol(), Symbol.of(terminalA), Symbol.of(terminalB), Symbol.of(terminalC), Symbol.of(terminalC), Symbol.of(nonTerminalA));
+        grammar.addProduction(grammar.getStartSymbol(), Symbol.of(terminalA), Symbol.of(terminalB), Symbol.of(nonTerminalA));
+        grammar.addProduction(grammar.getStartSymbol(), Symbol.of(terminalA), Symbol.of(terminalB), Symbol.of(terminalB), Symbol.of(nonTerminalA));
+        grammar.addProduction(grammar.getStartSymbol(), Symbol.of(terminalB), Symbol.of(terminalA), Symbol.of(nonTerminalA));
+        grammar.addProduction(nonTerminalA, Symbol.of(terminalC), Symbol.of(terminalB));
+        grammar.addProduction(nonTerminalA, Symbol.of(terminalC), Symbol.of(terminalB), Symbol.of(terminalA), Symbol.of(terminalC));
+        grammar.addProduction(nonTerminalA, Symbol.of(terminalC), Symbol.of(terminalC));
+
+        return grammar;
+    }
+    public static Grammar testLeftfactoring() {
         Grammar grammar = new Grammar("G0", "A");
         Terminal terminalA = new Terminal("a", "a");
         Terminal terminalB = new Terminal("b", "b");
@@ -152,38 +177,15 @@ public class App {
         NonTerminal nonTerminalS = grammar.getStartSymbol();
         NonTerminal nonTerminalU = new NonTerminal("U");
 
-        Terminal eps = Terminal.EPSILON;
         Terminal terminalA = new Terminal("a", "a");
         Terminal terminalB = new Terminal("b", "b");
 
-        grammar.addTerminals(terminalA, terminalB, eps);
+        grammar.addTerminals(terminalA, terminalB);
         grammar.addNonTerminals(nonTerminalS, nonTerminalU);
-        grammar.addProduction(nonTerminalS, Symbol.of(eps));
+        grammar.addProduction(nonTerminalS, Symbol.EPSILON);
         grammar.addProduction(nonTerminalS, Symbol.of(terminalA), Symbol.of(nonTerminalU), Symbol.of(terminalB), Symbol.of(nonTerminalU));
         grammar.addProduction(nonTerminalU, Symbol.of(nonTerminalS));
         grammar.addProduction(nonTerminalU, Symbol.of(terminalB), Symbol.of(terminalA));
-
-        return grammar;
-    }
-    public static Grammar testConversionToChomskyNormalForm3() {
-        Grammar grammar = new Grammar("Test Chomsky", "S");
-        NonTerminal nonTerminalS = grammar.getStartSymbol();
-        NonTerminal nonTerminalA = new NonTerminal("A");
-        NonTerminal nonTerminalB = new NonTerminal("B");
-
-        Terminal terminalA = new Terminal("a", "a");
-        Terminal terminalB = new Terminal("b", "b");
-        Terminal eps = Terminal.EPSILON;
-
-        grammar.addTerminals(terminalA, terminalB, eps);
-        grammar.addNonTerminals(nonTerminalS, nonTerminalA, nonTerminalB);
-        grammar.addProduction(nonTerminalS, Symbol.of(nonTerminalA), Symbol.of(nonTerminalB));
-        grammar.addProduction(nonTerminalA, Symbol.of(nonTerminalS), Symbol.of(nonTerminalA));
-        grammar.addProduction(nonTerminalA, Symbol.of(nonTerminalB), Symbol.of(nonTerminalB));
-        grammar.addProduction(nonTerminalA, Symbol.of(terminalB), Symbol.of(nonTerminalB));
-        grammar.addProduction(nonTerminalB, Symbol.of(terminalB));
-        grammar.addProduction(nonTerminalB, Symbol.of(terminalA), Symbol.of(nonTerminalA));
-        grammar.addProduction(nonTerminalB, Symbol.of(eps));
 
         return grammar;
     }
@@ -239,15 +241,14 @@ public class App {
         Terminal terminalB = new Terminal("b", "b");
         Terminal terminalC = new Terminal("c", "c");
         Terminal terminalD = new Terminal("d", "d");
-        Terminal terminalEps = Terminal.EPSILON;
 
-        grammar.addTerminals(terminalA, terminalB, terminalC, terminalD, terminalEps);
+        grammar.addTerminals(terminalA, terminalB, terminalC, terminalD);
         grammar.addNonTerminals(nonTerminalA);
         grammar.addProduction(nonTerminalS, Symbol.of(nonTerminalA), Symbol.of(terminalA));
         grammar.addProduction(nonTerminalS, Symbol.of(terminalB));
         grammar.addProduction(nonTerminalA, Symbol.of(nonTerminalA), Symbol.of(terminalC));
         grammar.addProduction(nonTerminalA, Symbol.of(nonTerminalS), Symbol.of(terminalD));
-        grammar.addProduction(nonTerminalA, Symbol.of(terminalEps));
+        grammar.addProduction(nonTerminalA, Symbol.EPSILON);
 
         return grammar;
     }

@@ -1,14 +1,11 @@
 {
-  "name" : "Test Chomsky",
+  "name" : "G",
   "startSymbol" : {
     "name" : "S"
   },
   "terminals" : [ {
-    "name" : "a",
-    "spell" : "a"
-  }, {
-    "name" : "b",
-    "spell" : "b"
+    "name" : "d",
+    "spell" : "d"
   } ],
   "nonTerminals" : [ {
     "name" : "S"
@@ -16,6 +13,10 @@
     "name" : "A"
   }, {
     "name" : "B"
+  }, {
+    "name" : "C"
+  }, {
+    "name" : "D"
   } ],
   "productions" : [ {
     "lhs" : {
@@ -27,70 +28,61 @@
     }, {
       "name" : "B",
       "type" : "nonterm"
+    }, {
+      "name" : "A",
+      "type" : "nonterm"
+    }, {
+      "name" : "C",
+      "type" : "nonterm"
     } ]
   }, {
     "lhs" : {
-      "name" : "A"
+      "name" : "S"
     },
     "rhs" : [ {
+      "name" : "D",
+      "type" : "nonterm"
+    }, {
       "name" : "S",
       "type" : "nonterm"
-    }, {
-      "name" : "A",
-      "type" : "nonterm"
     } ]
   }, {
     "lhs" : {
       "name" : "A"
-    },
-    "rhs" : [ {
-      "name" : "B",
-      "type" : "nonterm"
-    }, {
-      "name" : "B",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "A"
-    },
-    "rhs" : [ {
-      "name" : "b",
-      "spell" : "b",
-      "type" : "term"
-    }, {
-      "name" : "B",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "B"
-    },
-    "rhs" : [ {
-      "name" : "b",
-      "spell" : "b",
-      "type" : "term"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "B"
-    },
-    "rhs" : [ {
-      "name" : "a",
-      "spell" : "a",
-      "type" : "term"
-    }, {
-      "name" : "A",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "B"
     },
     "rhs" : [ {
       "name" : "EPSILON",
       "spell" : "eps",
       "type" : "eps"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "B"
+    },
+    "rhs" : [ {
+      "name" : "A",
+      "type" : "nonterm"
+    }, {
+      "name" : "C",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "C"
+    },
+    "rhs" : [ {
+      "name" : "EPSILON",
+      "spell" : "eps",
+      "type" : "eps"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "D"
+    },
+    "rhs" : [ {
+      "name" : "d",
+      "spell" : "d",
+      "type" : "term"
     } ]
   } ]
 }

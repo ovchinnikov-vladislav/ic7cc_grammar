@@ -1,5 +1,5 @@
 {
-  "name" : "Remove Meeting Several Terminals",
+  "name" : "G0",
   "startSymbol" : {
     "name" : "A"
   },
@@ -10,106 +10,92 @@
     "name" : "b",
     "spell" : "b"
   }, {
-    "name" : "c",
-    "spell" : "c"
-  }, {
     "name" : "d",
     "spell" : "d"
   } ],
   "nonTerminals" : [ {
     "name" : "A"
   }, {
-    "name" : "B"
-  }, {
     "name" : "C"
   }, {
-    "name" : "A_MST"
+    "name" : "D"
   }, {
-    "name" : "B_MST"
+    "name" : "A'"
   }, {
-    "name" : "C_MST"
-  }, {
-    "name" : "D_MST"
+    "name" : "A''"
   } ],
   "productions" : [ {
     "lhs" : {
-      "name" : "A_MST"
+      "name" : "A'"
     },
     "rhs" : [ {
-      "name" : "a",
-      "spell" : "a",
-      "type" : "term"
+      "name" : "D",
+      "type" : "nonterm"
     } ]
   }, {
     "lhs" : {
-      "name" : "A"
+      "name" : "A'"
     },
     "rhs" : [ {
-      "name" : "A_MST",
+      "name" : "C",
       "type" : "nonterm"
     }, {
-      "name" : "A_MST",
+      "name" : "D",
       "type" : "nonterm"
     } ]
   }, {
     "lhs" : {
-      "name" : "B_MST"
+      "name" : "A'"
     },
     "rhs" : [ {
-      "name" : "b",
-      "spell" : "b",
+      "name" : "d",
+      "spell" : "d",
       "type" : "term"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "B"
-    },
-    "rhs" : [ {
-      "name" : "B_MST",
-      "type" : "nonterm"
     }, {
       "name" : "C",
       "type" : "nonterm"
     } ]
   }, {
     "lhs" : {
+      "name" : "A''"
+    },
+    "rhs" : [ {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    }, {
+      "name" : "A'",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
       "name" : "A"
     },
     "rhs" : [ {
-      "name" : "A_MST",
-      "type" : "nonterm"
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
     }, {
-      "name" : "B",
+      "name" : "A''",
       "type" : "nonterm"
     } ]
   }, {
     "lhs" : {
-      "name" : "C_MST"
+      "name" : "A''"
     },
     "rhs" : [ {
-      "name" : "c",
-      "spell" : "c",
-      "type" : "term"
+      "name" : "EPSILON",
+      "spell" : "eps",
+      "type" : "eps"
     } ]
   }, {
     "lhs" : {
-      "name" : "D_MST"
+      "name" : "A''"
     },
     "rhs" : [ {
       "name" : "d",
       "spell" : "d",
       "type" : "term"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "C"
-    },
-    "rhs" : [ {
-      "name" : "C_MST",
-      "type" : "nonterm"
-    }, {
-      "name" : "D_MST",
-      "type" : "nonterm"
     } ]
   } ]
 }

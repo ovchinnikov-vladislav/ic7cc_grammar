@@ -24,6 +24,24 @@
   } ],
   "productions" : [ {
     "lhs" : {
+      "name" : "C"
+    },
+    "rhs" : [ {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "B"
+    },
+    "rhs" : [ {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
       "name" : "A"
     },
     "rhs" : [ {
@@ -33,15 +51,6 @@
     } ]
   }, {
     "lhs" : {
-      "name" : "B"
-    },
-    "rhs" : [ {
-      "name" : "b",
-      "spell" : "b",
-      "type" : "term"
-    } ]
-  }, {
-    "lhs" : {
       "name" : "C"
     },
     "rhs" : [ {
@@ -50,15 +59,6 @@
     }, {
       "name" : "D",
       "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "C"
-    },
-    "rhs" : [ {
-      "name" : "c",
-      "spell" : "c",
-      "type" : "term"
     } ]
   }, {
     "lhs" : {
@@ -74,26 +74,15 @@
       "name" : "B"
     },
     "rhs" : [ {
-      "name" : "D",
-      "type" : "nonterm"
-    }, {
-      "name" : "D",
-      "type" : "nonterm"
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
     } ]
   }, {
     "lhs" : {
       "name" : "B"
     },
     "rhs" : [ {
-      "name" : "c",
-      "spell" : "c",
-      "type" : "term"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "A"
-    },
-    "rhs" : [ {
       "name" : "D",
       "type" : "nonterm"
     }, {
@@ -108,6 +97,17 @@
       "name" : "c",
       "spell" : "c",
       "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "D",
+      "type" : "nonterm"
+    }, {
+      "name" : "D",
+      "type" : "nonterm"
     } ]
   } ]
 }

@@ -1,32 +1,25 @@
 package ic7cc.ovchinnikov.lab2.optimization;
 
 import ic7cc.ovchinnikov.lab2.model.*;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 public class GrammarWithoutLeftRecursionBuilder {
-
-    private static final Logger log = Logger.getLogger(GrammarWithoutLeftRecursionBuilder.class);
 
     /** Устранение левой рекурсии
      * @param grammar - грамматика без циклов и eps-продукций
      * @return грамматика без левой рекурсии
      * */
     public static Grammar build(Grammar grammar) {
-        log.debug("Left Recursion Elimination");
-        log.debug("Grammar Before:\n" + grammar);
+        log.info("Left Recursion Elimination");
+        log.info("Grammar Before:\n" + grammar);
         // Создаем новую грамматику на основе существующей
-        Grammar newGrammar = new Grammar(grammar.getName(), grammar.getStartSymbol().getName());
-        newGrammar.addTerminals(grammar.getTerminals().toArray(Terminal[]::new));
-        newGrammar.addNonTerminals(grammar.getNonTerminals().toArray(NonTerminal[]::new));
-
-        grammar.getProductions().forEach(production ->
-            newGrammar.addProduction(production.getLhs(), production.getRhs().toArray(Symbol[]::new))
-        );
+        Grammar newGrammar = grammar.clone();
 
         // Расположение нетерминалов в произвольном порядке (генерация из множества) NT1, NT2, NT3, ... NTn
         List<NonTerminal> nonTerms = new ArrayList<>(grammar.getNonTerminals());
@@ -57,7 +50,7 @@ public class GrammarWithoutLeftRecursionBuilder {
                         }
                     }
                 }
-                log.debug("i = " + i + ", j = " + j + ". " + newGrammar.toString());
+                log.info("i = " + i + ", j = " + j + ". " + newGrammar.toString());
             }
 
             // Устранение непосредственной левой рекурсии среди NTi - продукций
@@ -76,10 +69,9 @@ public class GrammarWithoutLeftRecursionBuilder {
                         rhs.add(Symbol.of(newNonTerminal));
                         Production updateOldProduction = new Production(newNonTerminal, rhs);
 
-                        Terminal eps = Terminal.EPSILON;
-                        newGrammar.addTerminals(eps);
+
                         Production newProduction = new Production(newNonTerminal, new LinkedList<>() {{
-                            add(Symbol.of(eps));
+                            add(Symbol.EPSILON);
                         }});
 
                         newGrammar.addProduction(updateOldProduction);
@@ -89,7 +81,7 @@ public class GrammarWithoutLeftRecursionBuilder {
                         NonTerminal newNonTerminal = new NonTerminal(nonTerms.get(i).getName() + "'");
                         newGrammar.addNonTerminals(newNonTerminal);
                         LinkedList<Symbol> rhs = new LinkedList<>(production.getRhs());
-                        rhs.remove(Symbol.of(Terminal.EPSILON));
+                        rhs.remove(Symbol.EPSILON);
                         rhs.add(Symbol.of(newNonTerminal));
                         Production updateOldProduction = new Production(production.getLhs(), rhs);
 

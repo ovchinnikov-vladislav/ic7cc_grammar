@@ -1,11 +1,11 @@
 {
-  "name" : "G0",
+  "name" : "Test Chomsky",
   "startSymbol" : {
     "name" : "E"
   },
   "terminals" : [ {
     "name" : "IDENT",
-    "spell" : "a"
+    "spell" : "id"
   }, {
     "name" : "ADD",
     "spell" : "+"
@@ -52,8 +52,19 @@
     },
     "rhs" : [ {
       "name" : "IDENT",
-      "spell" : "a",
+      "spell" : "id",
       "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "E"
+    },
+    "rhs" : [ {
+      "name" : "T",
+      "type" : "nonterm"
+    }, {
+      "name" : "E'",
+      "type" : "nonterm"
     } ]
   }, {
     "lhs" : {
@@ -78,17 +89,6 @@
       "name" : "EPSILON",
       "spell" : "eps",
       "type" : "eps"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "E"
-    },
-    "rhs" : [ {
-      "name" : "T",
-      "type" : "nonterm"
-    }, {
-      "name" : "E'",
-      "type" : "nonterm"
     } ]
   }, {
     "lhs" : {

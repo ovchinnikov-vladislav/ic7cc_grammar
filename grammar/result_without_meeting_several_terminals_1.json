@@ -1,107 +1,115 @@
 {
-  "name" : "Test Removing Long Rules",
+  "name" : "Remove Meeting Several Terminals",
   "startSymbol" : {
-    "name" : "S"
+    "name" : "A"
   },
   "terminals" : [ {
     "name" : "a",
     "spell" : "a"
+  }, {
+    "name" : "b",
+    "spell" : "b"
   }, {
     "name" : "c",
     "spell" : "c"
   }, {
     "name" : "d",
     "spell" : "d"
-  }, {
-    "name" : "e",
-    "spell" : "e"
-  }, {
-    "name" : "f",
-    "spell" : "f"
   } ],
   "nonTerminals" : [ {
-    "name" : "S"
-  }, {
     "name" : "A"
   }, {
     "name" : "B"
   }, {
-    "name" : "A0"
+    "name" : "C"
   }, {
-    "name" : "A1"
+    "name" : "B'"
   }, {
-    "name" : "B0"
+    "name" : "C'"
+  }, {
+    "name" : "D'"
+  }, {
+    "name" : "A'"
   } ],
   "productions" : [ {
     "lhs" : {
-      "name" : "A"
+      "name" : "B'"
     },
     "rhs" : [ {
-      "name" : "a",
-      "spell" : "a",
+      "name" : "b",
+      "spell" : "b",
       "type" : "term"
-    }, {
-      "name" : "A0",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "A0"
-    },
-    "rhs" : [ {
-      "name" : "B",
-      "type" : "nonterm"
-    }, {
-      "name" : "A1",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "A1"
-    },
-    "rhs" : [ {
-      "name" : "c",
-      "spell" : "c",
-      "type" : "term"
-    }, {
-      "name" : "B",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "S"
-    },
-    "rhs" : [ {
-      "name" : "A",
-      "type" : "nonterm"
-    }, {
-      "name" : "B",
-      "type" : "nonterm"
     } ]
   }, {
     "lhs" : {
       "name" : "B"
     },
     "rhs" : [ {
-      "name" : "d",
-      "spell" : "d",
-      "type" : "term"
+      "name" : "B'",
+      "type" : "nonterm"
     }, {
-      "name" : "B0",
+      "name" : "C",
       "type" : "nonterm"
     } ]
   }, {
     "lhs" : {
-      "name" : "B0"
+      "name" : "C'"
     },
     "rhs" : [ {
-      "name" : "e",
-      "spell" : "e",
+      "name" : "c",
+      "spell" : "c",
       "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "D'"
+    },
+    "rhs" : [ {
+      "name" : "d",
+      "spell" : "d",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "C"
+    },
+    "rhs" : [ {
+      "name" : "C'",
+      "type" : "nonterm"
     }, {
-      "name" : "f",
-      "spell" : "f",
+      "name" : "D'",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A'"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
       "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "A'",
+      "type" : "nonterm"
+    }, {
+      "name" : "A'",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "A'",
+      "type" : "nonterm"
+    }, {
+      "name" : "B",
+      "type" : "nonterm"
     } ]
   } ]
 }

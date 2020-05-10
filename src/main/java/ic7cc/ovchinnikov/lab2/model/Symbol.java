@@ -1,15 +1,10 @@
 package ic7cc.ovchinnikov.lab2.model;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.util.Objects;
-
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.EXISTING_PROPERTY;
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 
 @Getter
 @ToString
@@ -21,7 +16,7 @@ public class Symbol {
     private final Type type;
 
     @JsonCreator
-    private Symbol(@JsonProperty("name") String name, @JsonProperty("spell") String spell, @JsonProperty("type") Type type) {
+    public Symbol(@JsonProperty("name") String name, @JsonProperty("spell") String spell, @JsonProperty("type") Type type) {
         this.name = name;
         this.spell = spell;
         this.type = type;
@@ -31,8 +26,12 @@ public class Symbol {
         @JsonProperty("nonterm")
         NON_TERM,
         @JsonProperty("term")
-        TERM
+        TERM,
+        @JsonProperty("eps")
+        EPS
     }
+
+    public static final Symbol EPSILON = new Symbol("EPSILON", "eps", Type.EPS);
 
     public Terminal isTerminalGetting() {
         if (type == Type.TERM)
@@ -56,7 +55,7 @@ public class Symbol {
 
     @JsonIgnore
     public boolean isEpsilon() {
-        return getName().equals(Terminal.EPSILON.getName()) && getType() == Type.TERM && getSpell().equals(Terminal.EPSILON.getSpell());
+        return Type.EPS == type;
     }
 
     public static Symbol of(Terminal terminal) {

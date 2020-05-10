@@ -35,6 +35,10 @@ public class NonTerminal implements Comparable<NonTerminal> {
                 '}';
     }
 
+    public Symbol toSymbol() {
+        return new Symbol(name, null, Symbol.Type.NON_TERM);
+    }
+
     @Override
     public int compareTo(NonTerminal o) {
         return this.name.compareTo(o.name);

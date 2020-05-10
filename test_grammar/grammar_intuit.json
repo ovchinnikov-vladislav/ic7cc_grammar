@@ -9,9 +9,6 @@
   }, {
     "name" : "b",
     "spell" : "b"
-  }, {
-    "name" : "EPSILON",
-    "spell" : ""
   } ],
   "nonTerminals" : [ {
     "name" : "S"
@@ -24,8 +21,8 @@
     },
     "rhs" : [ {
       "name" : "EPSILON",
-      "spell" : "",
-      "type" : "term"
+      "spell" : "eps",
+      "type" : "eps"
     } ]
   }, {
     "lhs" : {

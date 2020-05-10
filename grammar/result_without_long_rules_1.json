@@ -69,17 +69,6 @@
     } ]
   }, {
     "lhs" : {
-      "name" : "S"
-    },
-    "rhs" : [ {
-      "name" : "A",
-      "type" : "nonterm"
-    }, {
-      "name" : "B",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
       "name" : "B"
     },
     "rhs" : [ {
@@ -102,6 +91,17 @@
       "name" : "f",
       "spell" : "f",
       "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S"
+    },
+    "rhs" : [ {
+      "name" : "A",
+      "type" : "nonterm"
+    }, {
+      "name" : "B",
+      "type" : "nonterm"
     } ]
   } ]
 }

@@ -1,0 +1,91 @@
+{
+  "name" : "Example 4.11",
+  "startSymbol" : {
+    "name" : "STMT"
+  },
+  "terminals" : [ {
+    "name" : "IF",
+    "spell" : "if"
+  }, {
+    "name" : "THEN",
+    "spell" : "then"
+  }, {
+    "name" : "ELSE",
+    "spell" : "else"
+  }, {
+    "name" : "IDENT",
+    "spell" : "a"
+  }, {
+    "name" : "IDENT",
+    "spell" : "b"
+  } ],
+  "nonTerminals" : [ {
+    "name" : "STMT"
+  }, {
+    "name" : "EXPR"
+  }, {
+    "name" : "STMT'"
+  } ],
+  "productions" : [ {
+    "lhs" : {
+      "name" : "EXPR"
+    },
+    "rhs" : [ {
+      "name" : "IDENT",
+      "spell" : "b",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "STMT'"
+    },
+    "rhs" : [ {
+      "name" : "EPSILON",
+      "spell" : "eps",
+      "type" : "eps"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "STMT"
+    },
+    "rhs" : [ {
+      "name" : "IF",
+      "spell" : "if",
+      "type" : "term"
+    }, {
+      "name" : "EXPR",
+      "type" : "nonterm"
+    }, {
+      "name" : "THEN",
+      "spell" : "then",
+      "type" : "term"
+    }, {
+      "name" : "STMT",
+      "type" : "nonterm"
+    }, {
+      "name" : "STMT'",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "STMT'"
+    },
+    "rhs" : [ {
+      "name" : "ELSE",
+      "spell" : "else",
+      "type" : "term"
+    }, {
+      "name" : "STMT",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "STMT"
+    },
+    "rhs" : [ {
+      "name" : "IDENT",
+      "spell" : "a",
+      "type" : "term"
+    } ]
+  } ]
+}

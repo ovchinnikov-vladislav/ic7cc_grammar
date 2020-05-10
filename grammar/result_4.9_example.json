@@ -1,5 +1,5 @@
 {
-  "name" : "S0",
+  "name" : "Example 4.9",
   "startSymbol" : {
     "name" : "S"
   },
@@ -15,9 +15,6 @@
   }, {
     "name" : "d",
     "spell" : "d"
-  }, {
-    "name" : "EPSILON",
-    "spell" : ""
   } ],
   "nonTerminals" : [ {
     "name" : "S"
@@ -31,8 +28,11 @@
       "name" : "S"
     },
     "rhs" : [ {
-      "name" : "b",
-      "spell" : "b",
+      "name" : "A",
+      "type" : "nonterm"
+    }, {
+      "name" : "a",
+      "spell" : "a",
       "type" : "term"
     } ]
   }, {
@@ -40,11 +40,8 @@
       "name" : "S"
     },
     "rhs" : [ {
-      "name" : "A",
-      "type" : "nonterm"
-    }, {
-      "name" : "a",
-      "spell" : "a",
+      "name" : "b",
+      "spell" : "b",
       "type" : "term"
     } ]
   }, {
@@ -81,8 +78,16 @@
     },
     "rhs" : [ {
       "name" : "EPSILON",
-      "spell" : "",
-      "type" : "term"
+      "spell" : "eps",
+      "type" : "eps"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "A'",
+      "type" : "nonterm"
     } ]
   }, {
     "lhs" : {
@@ -97,14 +102,6 @@
       "spell" : "d",
       "type" : "term"
     }, {
-      "name" : "A'",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "A"
-    },
-    "rhs" : [ {
       "name" : "A'",
       "type" : "nonterm"
     } ]

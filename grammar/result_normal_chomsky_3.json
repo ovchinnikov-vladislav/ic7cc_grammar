@@ -1,7 +1,7 @@
 {
   "name" : "Test Chomsky",
   "startSymbol" : {
-    "name" : "S_NEW_START"
+    "name" : "S''"
   },
   "terminals" : [ {
     "name" : "a",
@@ -9,37 +9,72 @@
   }, {
     "name" : "b",
     "spell" : "b"
-  }, {
-    "name" : "EPSILON",
-    "spell" : ""
   } ],
   "nonTerminals" : [ {
-    "name" : "S_NEW_START"
-  }, {
-    "name" : "S"
+    "name" : "S''"
   }, {
     "name" : "A"
   }, {
     "name" : "B"
   }, {
-    "name" : "A_MST"
+    "name" : "S"
   }, {
-    "name" : "B_MST"
+    "name" : "A'"
+  }, {
+    "name" : "B'"
   } ],
   "productions" : [ {
     "lhs" : {
-      "name" : "A"
+      "name" : "S''"
     },
     "rhs" : [ {
-      "name" : "S",
+      "name" : "EPSILON",
+      "spell" : "eps",
+      "type" : "eps"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "B"
+    },
+    "rhs" : [ {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S"
+    },
+    "rhs" : [ {
+      "name" : "A",
       "type" : "nonterm"
     }, {
-      "name" : "A",
+      "name" : "B",
       "type" : "nonterm"
     } ]
   }, {
     "lhs" : {
-      "name" : "A_MST"
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "B",
+      "type" : "nonterm"
+    }, {
+      "name" : "B",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "B"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A'"
     },
     "rhs" : [ {
       "name" : "a",
@@ -51,41 +86,10 @@
       "name" : "B"
     },
     "rhs" : [ {
-      "name" : "A_MST",
+      "name" : "A'",
       "type" : "nonterm"
     }, {
       "name" : "A",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "B"
-    },
-    "rhs" : [ {
-      "name" : "b",
-      "spell" : "b",
-      "type" : "term"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "A"
-    },
-    "rhs" : [ {
-      "name" : "B",
-      "type" : "nonterm"
-    }, {
-      "name" : "B",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "S"
-    },
-    "rhs" : [ {
-      "name" : "A",
-      "type" : "nonterm"
-    }, {
-      "name" : "B",
       "type" : "nonterm"
     } ]
   }, {
@@ -99,7 +103,7 @@
     } ]
   }, {
     "lhs" : {
-      "name" : "B_MST"
+      "name" : "B'"
     },
     "rhs" : [ {
       "name" : "b",
@@ -111,7 +115,7 @@
       "name" : "A"
     },
     "rhs" : [ {
-      "name" : "B_MST",
+      "name" : "B'",
       "type" : "nonterm"
     }, {
       "name" : "B",
@@ -119,18 +123,7 @@
     } ]
   }, {
     "lhs" : {
-      "name" : "S_NEW_START"
-    },
-    "rhs" : [ {
-      "name" : "A",
-      "type" : "nonterm"
-    }, {
-      "name" : "B",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "S"
+      "name" : "A"
     },
     "rhs" : [ {
       "name" : "S",
@@ -164,60 +157,7 @@
       "name" : "S"
     },
     "rhs" : [ {
-      "name" : "B_MST",
-      "type" : "nonterm"
-    }, {
-      "name" : "B",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "A"
-    },
-    "rhs" : [ {
-      "name" : "A_MST",
-      "type" : "nonterm"
-    }, {
-      "name" : "A",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "S_NEW_START"
-    },
-    "rhs" : [ {
-      "name" : "S",
-      "type" : "nonterm"
-    }, {
-      "name" : "A",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "S_NEW_START"
-    },
-    "rhs" : [ {
-      "name" : "B",
-      "type" : "nonterm"
-    }, {
-      "name" : "B",
-      "type" : "nonterm"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "S_NEW_START"
-    },
-    "rhs" : [ {
-      "name" : "b",
-      "spell" : "b",
-      "type" : "term"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "S_NEW_START"
-    },
-    "rhs" : [ {
-      "name" : "B_MST",
+      "name" : "B'",
       "type" : "nonterm"
     }, {
       "name" : "B",
@@ -228,7 +168,7 @@
       "name" : "S"
     },
     "rhs" : [ {
-      "name" : "A_MST",
+      "name" : "S",
       "type" : "nonterm"
     }, {
       "name" : "A",
@@ -236,10 +176,123 @@
     } ]
   }, {
     "lhs" : {
-      "name" : "S_NEW_START"
+      "name" : "S"
     },
     "rhs" : [ {
-      "name" : "A_MST",
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S"
+    },
+    "rhs" : [ {
+      "name" : "A'",
+      "type" : "nonterm"
+    }, {
+      "name" : "A",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "A'",
+      "type" : "nonterm"
+    }, {
+      "name" : "A",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "A",
+      "type" : "nonterm"
+    }, {
+      "name" : "B",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S''"
+    },
+    "rhs" : [ {
+      "name" : "A",
+      "type" : "nonterm"
+    }, {
+      "name" : "B",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S''"
+    },
+    "rhs" : [ {
+      "name" : "B",
+      "type" : "nonterm"
+    }, {
+      "name" : "B",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S''"
+    },
+    "rhs" : [ {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S''"
+    },
+    "rhs" : [ {
+      "name" : "B'",
+      "type" : "nonterm"
+    }, {
+      "name" : "B",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S''"
+    },
+    "rhs" : [ {
+      "name" : "S",
+      "type" : "nonterm"
+    }, {
+      "name" : "A",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S''"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S''"
+    },
+    "rhs" : [ {
+      "name" : "A'",
       "type" : "nonterm"
     }, {
       "name" : "A",

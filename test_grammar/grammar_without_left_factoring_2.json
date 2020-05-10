@@ -1,0 +1,162 @@
+{
+  "name" : "TEST",
+  "startSymbol" : {
+    "name" : "S"
+  },
+  "terminals" : [ {
+    "name" : "a",
+    "spell" : "a"
+  }, {
+    "name" : "b",
+    "spell" : "b"
+  }, {
+    "name" : "c",
+    "spell" : "c"
+  } ],
+  "nonTerminals" : [ {
+    "name" : "S"
+  }, {
+    "name" : "A"
+  } ],
+  "productions" : [ {
+    "lhs" : {
+      "name" : "S"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    }, {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    }, {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    }, {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    }, {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
+    }, {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
+    }, {
+      "name" : "A",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    }, {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    }, {
+      "name" : "A",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    }, {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    }, {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    }, {
+      "name" : "A",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S"
+    },
+    "rhs" : [ {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    }, {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    }, {
+      "name" : "A",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
+    }, {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
+    }, {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    }, {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    }, {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
+    }, {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
+    } ]
+  } ]
+}

@@ -1,7 +1,7 @@
 {
   "name" : "Test Chomsky",
   "startSymbol" : {
-    "name" : "S_NEW_START"
+    "name" : "S'"
   },
   "terminals" : [ {
     "name" : "a",
@@ -11,7 +11,7 @@
     "spell" : "b"
   } ],
   "nonTerminals" : [ {
-    "name" : "S_NEW_START"
+    "name" : "S'"
   }, {
     "name" : "S"
   }, {
@@ -23,38 +23,9 @@
   }, {
     "name" : "S0"
   }, {
-    "name" : "A_MST"
+    "name" : "A'"
   } ],
   "productions" : [ {
-    "lhs" : {
-      "name" : "A"
-    },
-    "rhs" : [ {
-      "name" : "a",
-      "spell" : "a",
-      "type" : "term"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "B"
-    },
-    "rhs" : [ {
-      "name" : "b",
-      "spell" : "b",
-      "type" : "term"
-    } ]
-  }, {
-    "lhs" : {
-      "name" : "S"
-    },
-    "rhs" : [ {
-      "name" : "B",
-      "type" : "nonterm"
-    }, {
-      "name" : "A",
-      "type" : "nonterm"
-    } ]
-  }, {
     "lhs" : {
       "name" : "A"
     },
@@ -89,7 +60,18 @@
     } ]
   }, {
     "lhs" : {
-      "name" : "A_MST"
+      "name" : "S"
+    },
+    "rhs" : [ {
+      "name" : "B",
+      "type" : "nonterm"
+    }, {
+      "name" : "A",
+      "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "A'"
     },
     "rhs" : [ {
       "name" : "a",
@@ -101,7 +83,7 @@
       "name" : "S"
     },
     "rhs" : [ {
-      "name" : "A_MST",
+      "name" : "A'",
       "type" : "nonterm"
     }, {
       "name" : "S0",
@@ -120,7 +102,25 @@
     } ]
   }, {
     "lhs" : {
-      "name" : "S_NEW_START"
+      "name" : "A"
+    },
+    "rhs" : [ {
+      "name" : "a",
+      "spell" : "a",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "B"
+    },
+    "rhs" : [ {
+      "name" : "b",
+      "spell" : "b",
+      "type" : "term"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "S'"
     },
     "rhs" : [ {
       "name" : "B",
@@ -131,10 +131,10 @@
     } ]
   }, {
     "lhs" : {
-      "name" : "S_NEW_START"
+      "name" : "S'"
     },
     "rhs" : [ {
-      "name" : "A_MST",
+      "name" : "A'",
       "type" : "nonterm"
     }, {
       "name" : "S0",

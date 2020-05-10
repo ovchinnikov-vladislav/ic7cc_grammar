@@ -1,0 +1,89 @@
+{
+  "name": "Example 4.7",
+  "startSymbol": {
+    "name": "E"
+  },
+  "terminals": [ {
+    "name": "IDENT",
+    "spell": "id"
+  }, {
+    "name": "ADD",
+    "spell": "+"
+  }, {
+    "name": "MUL",
+    "spell": "*"
+  }, {
+    "name": "LPAREN",
+    "spell": "("
+  }, {
+    "name": "RPAREN",
+    "spell": ")"
+  }],
+  "nonTerminals" : [ {
+    "name": "E"
+  }, {
+    "name": "T"
+  }, {
+    "name": "F"
+  }],
+  "productions" : [ {
+    "lhs" : {"name": "E"},
+    "rhs" : [ {
+      "name": "E",
+      "type": "nonterm"
+    }, {
+      "name": "ADD",
+      "spell": "+",
+      "type": "term"
+    }, {
+      "name": "T",
+      "type": "nonterm"
+    } ]
+  }, {
+    "lhs": {"name": "E"},
+    "rhs": [{
+      "name": "T",
+      "type": "nonterm"
+    }]
+  }, {
+    "lhs": {"name": "T"},
+    "rhs": [{
+      "name": "T",
+      "type": "nonterm"
+    }, {
+      "name": "MUL",
+      "type": "term",
+      "spell": "*"
+    }, {
+      "name": "F",
+      "type": "nonterm"
+    }]
+  }, {
+    "lhs": {"name": "T"},
+    "rhs": [{
+      "name": "F",
+      "type": "nonterm"
+    }]
+  }, {
+    "lhs": {"name": "F"},
+    "rhs": [{
+      "name": "LPAREN",
+      "type": "term",
+      "spell": "("
+    }, {
+      "name": "E",
+      "type": "nonterm"
+    }, {
+      "name": "RPAREN",
+      "type": "term",
+      "spell": ")"
+    }]
+  }, {
+    "lhs": {"name": "F"},
+    "rhs": [{
+      "name": "IDENT",
+      "type": "term",
+      "spell": "id"
+    }]
+  } ]
+}

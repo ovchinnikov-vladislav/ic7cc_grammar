@@ -62,7 +62,7 @@ public class Grammar {
             }
         }
         if (resultRhs.size() == 0)
-            resultRhs.add(Symbol.of(Terminal.EPSILON));
+            resultRhs.add(Symbol.EPSILON);
 
         return productions.add(new Production(lhs, resultRhs));
     }
@@ -148,5 +148,16 @@ public class Grammar {
                     "\tProductions: \n" + productionString +
                 "}";
 
+    }
+
+    public Grammar clone() {
+        Grammar newGrammar = new Grammar(this.name, this.startSymbol.getName());
+        newGrammar.addTerminals(this.terminals.toArray(Terminal[]::new));
+        newGrammar.addNonTerminals(this.nonTerminals.toArray(NonTerminal[]::new));
+
+        for (Production production : productions) {
+            newGrammar.addProduction(production.getLhs(), production.getRhs().toArray(Symbol[]::new));
+        }
+        return newGrammar;
     }
 }

@@ -24,15 +24,6 @@
   } ],
   "productions" : [ {
     "lhs" : {
-      "name" : "C"
-    },
-    "rhs" : [ {
-      "name" : "c",
-      "spell" : "c",
-      "type" : "term"
-    } ]
-  }, {
-    "lhs" : {
       "name" : "A"
     },
     "rhs" : [ {
@@ -41,6 +32,15 @@
     }, {
       "name" : "F",
       "type" : "nonterm"
+    } ]
+  }, {
+    "lhs" : {
+      "name" : "C"
+    },
+    "rhs" : [ {
+      "name" : "c",
+      "spell" : "c",
+      "type" : "term"
     } ]
   }, {
     "lhs" : {

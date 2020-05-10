@@ -6,140 +6,288 @@ package ic7cc.ovchinnikov.lab2;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import ic7cc.ovchinnikov.lab2.model.Grammar;
-import ic7cc.ovchinnikov.lab2.optimization.GrammarWithLeftFactorizationBuilder;
+import ic7cc.ovchinnikov.lab2.model.NonTerminal;
+import ic7cc.ovchinnikov.lab2.model.Symbol;
+import ic7cc.ovchinnikov.lab2.model.Terminal;
+import ic7cc.ovchinnikov.lab2.optimization.GrammarWithLeftFactoringBuilder;
 import ic7cc.ovchinnikov.lab2.optimization.GrammarWithoutLeftRecursionBuilder;
 import ic7cc.ovchinnikov.lab2.optimization.ChomskyNormalGrammarBuilder;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class AppTest {
 
-    private static final Logger log = Logger.getLogger(AppTest.class.toString());
+    private static final Logger log = Logger.getLogger(AppTest.class.getName());
 
     private static final ObjectMapper mapper = new ObjectMapper()
             .enable(SerializationFeature.INDENT_OUTPUT);
 
     @Test
-    public void testBuildNormalFormChomsky1() throws IOException {
-        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_non_normal_form_chomsky_1.json").toFile(), Grammar.class);
+    public void testLeftRecursionElimination_4_7() throws IOException {
+        log.info("Test Left Recursion Elimination 4.7");
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_4.7_example.json").toFile(), Grammar.class);
 
-        Grammar resultGrammar = ChomskyNormalGrammarBuilder.build(grammar);
+        Grammar resultGrammar = GrammarWithoutLeftRecursionBuilder.build(grammar);
 
-        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+        Grammar expectedGrammar = mapper.readValue(Paths.get("grammar/result_4.7_example.json").toFile(), Grammar.class);
 
-        mapper.writeValue(Paths.get("grammar/grammar_normal_form_chomsky_1.json").toFile(), resultGrammar);
+        Assert.assertEquals(5, resultGrammar.getNonTerminals().size());
+        Assert.assertEquals(8, resultGrammar.getProductions().size());
+        Assert.assertEquals(grammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getStartSymbol(), resultGrammar.getStartSymbol());
+        Assert.assertEquals(expectedGrammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getNonTerminals(), resultGrammar.getNonTerminals());
+        Assert.assertEquals(expectedGrammar.getProductions(), resultGrammar.getProductions());
     }
 
     @Test
-    public void testBuildNormalFormChomsky2() throws IOException {
-        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_non_normal_form_chomsky_2.json").toFile(), Grammar.class);
+    public void testLeftRecursionElimination_4_9() throws IOException {
+        log.info("Test Left Recursion Elimination 4.9");
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_4.9_example.json").toFile(), Grammar.class);
 
-        Grammar resultGrammar = ChomskyNormalGrammarBuilder.build(grammar);
+        Grammar resultGrammar = GrammarWithoutLeftRecursionBuilder.build(grammar);
 
-        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+        Grammar expectedGrammar = mapper.readValue(Paths.get("grammar/result_4.9_example.json").toFile(), Grammar.class);
 
-        mapper.writeValue(Paths.get("grammar/grammar_normal_form_chomsky_2.json").toFile(), resultGrammar);
+        Assert.assertEquals(3, resultGrammar.getNonTerminals().size());
+        Assert.assertEquals(7, resultGrammar.getProductions().size());
+        Assert.assertEquals(grammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getStartSymbol(), resultGrammar.getStartSymbol());
+        Assert.assertEquals(expectedGrammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getNonTerminals(), resultGrammar.getNonTerminals());
+        Assert.assertEquals(expectedGrammar.getProductions(), resultGrammar.getProductions());
     }
 
     @Test
-    public void testBuildNormalFormChomsky3() throws IOException {
+    public void testLeftFactoring_4_11() throws IOException {
+        log.info("Test Left Factoring 4.11");
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_4.11_example.json").toFile(), Grammar.class);
+
+        Grammar resultGrammar = GrammarWithLeftFactoringBuilder.build(grammar);
+
+        Grammar expectedGrammar = mapper.readValue(Paths.get("grammar/result_4.11_example.json").toFile(), Grammar.class);
+
+        Assert.assertEquals(3, resultGrammar.getNonTerminals().size());
+        Assert.assertEquals(5, resultGrammar.getProductions().size());
+        Assert.assertEquals(grammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getStartSymbol(), resultGrammar.getStartSymbol());
+        Assert.assertEquals(expectedGrammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getNonTerminals(), resultGrammar.getNonTerminals());
+        Assert.assertEquals(expectedGrammar.getProductions(), resultGrammar.getProductions());
+    }
+
+    @Test
+    public void testLeftFactoring_1() throws IOException {
+        log.info("Test Left Factoring 1");
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_without_left_factoring_1.json").toFile(), Grammar.class);
+
+        Grammar resultGrammar = GrammarWithLeftFactoringBuilder.build(grammar);
+
+        Grammar expectedGrammar = mapper.readValue(Paths.get("grammar/result_left_factoring_1.json").toFile(), Grammar.class);
+
+        Assert.assertEquals(5, resultGrammar.getNonTerminals().size());
+        Assert.assertEquals(7, resultGrammar.getProductions().size());
+        Assert.assertEquals(grammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getStartSymbol(), resultGrammar.getStartSymbol());
+        Assert.assertEquals(expectedGrammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getNonTerminals(), resultGrammar.getNonTerminals());
+        Assert.assertEquals(expectedGrammar.getProductions(), resultGrammar.getProductions());
+    }
+
+    @Test
+    public void testLeftFactoring_2() throws IOException {
+        log.info("Test Left Factoring 2");
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_without_left_factoring_2.json").toFile(), Grammar.class);
+
+        Grammar resultGrammar = GrammarWithLeftFactoringBuilder.build(grammar);
+
+        Grammar expectedGrammar = mapper.readValue(Paths.get("grammar/result_left_factoring_2.json").toFile(), Grammar.class);
+
+        Assert.assertEquals(6, resultGrammar.getNonTerminals().size());
+        Assert.assertEquals(12, resultGrammar.getProductions().size());
+        Assert.assertEquals(grammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getStartSymbol(), resultGrammar.getStartSymbol());
+        Assert.assertEquals(expectedGrammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getNonTerminals(), resultGrammar.getNonTerminals());
+        Assert.assertEquals(expectedGrammar.getProductions(), resultGrammar.getProductions());
+    }
+
+    @Test
+    public void testBuildChomskyNormalForm_2_26() throws IOException {
+        log.info("Test Build Chomsky Normal Form 2.26");
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_2.26_example.json").toFile(), Grammar.class);
+
+        Grammar resultGrammar = ChomskyNormalGrammarBuilder.build(grammar);
+
+        Grammar expectedGrammar = mapper.readValue(Paths.get("grammar/result_2.26_example.json").toFile(), Grammar.class);
+
+        Assert.assertEquals(7, resultGrammar.getNonTerminals().size());
+        Assert.assertEquals(11, resultGrammar.getProductions().size());
+        Assert.assertEquals(grammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getStartSymbol(), resultGrammar.getStartSymbol());
+        Assert.assertEquals(expectedGrammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getNonTerminals(), resultGrammar.getNonTerminals());
+        Assert.assertEquals(expectedGrammar.getProductions(), resultGrammar.getProductions());
+    }
+
+    @Test
+    public void testBuildChomskyNormalFormFromGrammarIntuit() throws IOException {
+        log.info("Test Build Chomsky Normal Form Intuit");
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_intuit.json").toFile(), Grammar.class);
+
+        Grammar resultGrammar = ChomskyNormalGrammarBuilder.build(grammar);
+
+        Grammar expectedGrammar = mapper.readValue(Paths.get("grammar/result_grammar_normal_chomsky_intuit.json").toFile(), Grammar.class);
+
+        Assert.assertEquals(6, resultGrammar.getNonTerminals().size());
+        Assert.assertEquals(11, resultGrammar.getProductions().size());
+        Assert.assertEquals(grammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getStartSymbol(), resultGrammar.getStartSymbol());
+        Assert.assertEquals(expectedGrammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getNonTerminals(), resultGrammar.getNonTerminals());
+        Assert.assertEquals(expectedGrammar.getProductions(), resultGrammar.getProductions());
+    }
+
+    @Test
+    public void testBuildChomskyNormalForm3() throws IOException {
+        log.info("Test Build Chomsky Normal Form 3");
         Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_non_normal_form_chomsky_3.json").toFile(), Grammar.class);
 
         Grammar resultGrammar = ChomskyNormalGrammarBuilder.build(grammar);
 
-        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+        Grammar expectedGrammar = mapper.readValue(Paths.get("grammar/result_normal_chomsky_3.json").toFile(), Grammar.class);
 
-        mapper.writeValue(Paths.get("grammar/grammar_normal_form_chomsky_3.json").toFile(), resultGrammar);
-    }
-
-    @Test
-    public void testLeftRecursionEliminationG0() throws IOException {
-        Grammar grammar = mapper.readValue(Paths.get("test_grammar/g0.json").toFile(), Grammar.class);
-
-        Grammar resultGrammar = GrammarWithoutLeftRecursionBuilder.build(grammar);
-
-        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
-
-        mapper.writeValue(Paths.get("grammar/g0.json").toFile(), resultGrammar);
-    }
-
-    @Test
-    public void testLeftRecursionEliminationS0() throws IOException {
-        Grammar grammar = mapper.readValue(Paths.get("test_grammar/s0.json").toFile(), Grammar.class);
-
-        Grammar resultGrammar = GrammarWithoutLeftRecursionBuilder.build(grammar);
-
-        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
-
-        mapper.writeValue(Paths.get("grammar/s0.json").toFile(), resultGrammar);
-    }
-
-    @Test
-    public void testLeftFactorization() throws IOException {
-        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_without_left_factorization_1.json").toFile(), Grammar.class);
-
-        Grammar resultGrammar = GrammarWithLeftFactorizationBuilder.leftFactorization(grammar);
-
-        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
-
-        mapper.writeValue(Paths.get("grammar/grammar_with_left_factorization_1.json").toFile(), resultGrammar);
+        Assert.assertEquals(6, resultGrammar.getNonTerminals().size());
+        Assert.assertEquals(27, resultGrammar.getProductions().size());
+        Assert.assertEquals(grammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getStartSymbol(), resultGrammar.getStartSymbol());
+        Assert.assertEquals(expectedGrammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getNonTerminals(), resultGrammar.getNonTerminals());
+        Assert.assertEquals(expectedGrammar.getProductions(), resultGrammar.getProductions());
     }
 
     @Test
     public void testRemovingChainRules() throws IOException {
+        log.info("Test Removing Chain Rules");
         Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_with_chain_rules_1.json").toFile(), Grammar.class);
 
         Grammar resultGrammar = ChomskyNormalGrammarBuilder.removeChainRules(grammar);
 
-        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+        Grammar expectedGrammar = mapper.readValue(Paths.get("grammar/result_without_chain_rules_1.json").toFile(), Grammar.class);
 
-        mapper.writeValue(Paths.get("grammar/grammar_without_chain_rules_1.json").toFile(), resultGrammar);
+        Assert.assertEquals(4, resultGrammar.getNonTerminals().size());
+        Assert.assertEquals(9, resultGrammar.getProductions().size());
+        Assert.assertEquals(grammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getStartSymbol(), resultGrammar.getStartSymbol());
+        Assert.assertEquals(expectedGrammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getNonTerminals(), resultGrammar.getNonTerminals());
+        Assert.assertEquals(expectedGrammar.getProductions(), resultGrammar.getProductions());
     }
 
     @Test
     public void testRemovingMeetingSeveralTerminalsRules() throws IOException {
+        log.info("Test Removing Meeting Several Terminal Rules");
         Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_with_meeting_several_terminals_1.json").toFile(), Grammar.class);
 
         Grammar resultGrammar = ChomskyNormalGrammarBuilder.removeMeetingSeveralTerminals(grammar);
 
-        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+        Grammar expectedGrammar = mapper.readValue(Paths.get("grammar/result_without_meeting_several_terminals_1.json").toFile(), Grammar.class);
 
-        mapper.writeValue(Paths.get("grammar/grammar_without_meeting_several_terminals_1.json").toFile(), resultGrammar);
+        Assert.assertEquals(7, resultGrammar.getNonTerminals().size());
+        Assert.assertEquals(8, resultGrammar.getProductions().size());
+        Assert.assertEquals(grammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getStartSymbol(), resultGrammar.getStartSymbol());
+        Assert.assertEquals(expectedGrammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getNonTerminals(), resultGrammar.getNonTerminals());
+        Assert.assertEquals(expectedGrammar.getProductions(), resultGrammar.getProductions());
     }
 
     @Test
     public void testRemovingLongRules() throws IOException {
+        log.info("Test Removing Long Rules");
         Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_with_long_rules_1.json").toFile(), Grammar.class);
 
         Grammar resultGrammar = ChomskyNormalGrammarBuilder.removeLongRules(grammar);
 
-        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+        Grammar expectedGrammar = mapper.readValue(Paths.get("grammar/result_without_long_rules_1.json").toFile(), Grammar.class);
 
-        mapper.writeValue(Paths.get("grammar/grammar_without_long_rules_1.json").toFile(), resultGrammar);
+        Assert.assertEquals(6, resultGrammar.getNonTerminals().size());
+        Assert.assertEquals(6, resultGrammar.getProductions().size());
+        Assert.assertEquals(grammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getStartSymbol(), resultGrammar.getStartSymbol());
+        Assert.assertEquals(expectedGrammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getNonTerminals(), resultGrammar.getNonTerminals());
+        Assert.assertEquals(expectedGrammar.getProductions(), resultGrammar.getProductions());
+
     }
 
     @Test
     public void testRemovingUnreachableNonTerminal() throws IOException {
+        log.info("Test Removing Unreachable NonTerminal");
         Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_with_unreachable_non_terminal_1.json").toFile(), Grammar.class);
 
         Grammar resultGrammar = ChomskyNormalGrammarBuilder.removeUnreachableNonTerminal(grammar);
 
-        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+        Grammar expectedGrammar = mapper.readValue(Paths.get("grammar/result_without_unreachable_non_terminal_1.json").toFile(), Grammar.class);
 
-        mapper.writeValue(Paths.get("grammar/grammar_without_unreachable_non_terminal_1.json").toFile(), resultGrammar);
+        Assert.assertEquals(7, resultGrammar.getNonTerminals().size());
+        Assert.assertEquals(4, resultGrammar.getProductions().size());
+        Assert.assertEquals(grammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getStartSymbol(), resultGrammar.getStartSymbol());
+        Assert.assertEquals(expectedGrammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getNonTerminals(), resultGrammar.getNonTerminals());
+        Assert.assertEquals(expectedGrammar.getProductions(), resultGrammar.getProductions());
     }
 
     @Test
-    public void testRemovingUselessNonTerminal() throws IOException {
-        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_with_useless_non_terminal_1.json").toFile(), Grammar.class);
+    public void testRemoveNonGeneratingNonTerminals() throws IOException {
+        log.info("Test Removing Non Generating NonTerminal");
+        Grammar grammar = mapper.readValue(Paths.get("test_grammar/grammar_with_non_generating_non_terminals_1.json").toFile(), Grammar.class);
 
-        Grammar resultGrammar = ChomskyNormalGrammarBuilder.removeUselessCharacter(grammar);
+        Grammar resultGrammar = ChomskyNormalGrammarBuilder.removeNonGeneratingNonTerminals(grammar);
 
-        log.info("Before: \n" + grammar.toString() + "\nAfter: \n" + resultGrammar.toString());
+        Grammar expectedGrammar = mapper.readValue(Paths.get("grammar/result_without_non_generating_non_terminal_1.json").toFile(), Grammar.class);
 
-        mapper.writeValue(Paths.get("grammar/grammar_without_useless_non_terminal_1.json").toFile(), resultGrammar);
+        Assert.assertEquals(2, resultGrammar.getNonTerminals().size());
+        Assert.assertEquals(2, resultGrammar.getProductions().size());
+        Assert.assertEquals(grammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getStartSymbol(), resultGrammar.getStartSymbol());
+        Assert.assertEquals(expectedGrammar.getTerminals(), resultGrammar.getTerminals());
+        Assert.assertEquals(expectedGrammar.getNonTerminals(), resultGrammar.getNonTerminals());
+        Assert.assertEquals(expectedGrammar.getProductions(), resultGrammar.getProductions());
+    }
+
+    @Test
+    public void testSearchEpsNonTerminals() {
+        log.info("Test Search Eps NonTerminals");
+        Grammar grammar = new Grammar("G", "S");
+        NonTerminal nonTerminalS = new NonTerminal("S");
+        NonTerminal nonTerminalA = new NonTerminal("A");
+        NonTerminal nonTerminalB = new NonTerminal("B");
+        NonTerminal nonTerminalC = new NonTerminal("C");
+        NonTerminal nonTerminalD = new NonTerminal("D");
+
+        Terminal terminal = new Terminal("d", "d");
+        grammar.addNonTerminals(nonTerminalS, nonTerminalA, nonTerminalB, nonTerminalC, nonTerminalD);
+        grammar.addTerminals(terminal);
+        grammar.addProduction(nonTerminalS, nonTerminalA.toSymbol(), nonTerminalB.toSymbol(), nonTerminalA.toSymbol(), nonTerminalC.toSymbol());
+        grammar.addProduction(nonTerminalS, nonTerminalD.toSymbol(), nonTerminalS.toSymbol());
+        grammar.addProduction(nonTerminalA, Symbol.EPSILON);
+        grammar.addProduction(nonTerminalB, nonTerminalA.toSymbol(), nonTerminalC.toSymbol());
+        grammar.addProduction(nonTerminalC, Symbol.EPSILON);
+        grammar.addProduction(nonTerminalD, terminal.toSymbol());
+
+        Map<NonTerminal, Boolean> epsilonRules = ChomskyNormalGrammarBuilder.searchEpsilonRules(grammar);
+
+        Assert.assertTrue(epsilonRules.get(nonTerminalS));
+        Assert.assertTrue(epsilonRules.get(nonTerminalA));
+        Assert.assertTrue(epsilonRules.get(nonTerminalB));
+        Assert.assertTrue(epsilonRules.get(nonTerminalC));
+        Assert.assertFalse(epsilonRules.get(nonTerminalD));
     }
 }

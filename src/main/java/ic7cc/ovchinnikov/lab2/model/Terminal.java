@@ -2,8 +2,6 @@ package ic7cc.ovchinnikov.lab2.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.*;
 
 import java.util.Objects;
@@ -20,8 +18,6 @@ public class Terminal {
         this.spell = spell;
     }
 
-    public static final Terminal EPSILON = new Terminal("EPSILON", "");
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -34,6 +30,10 @@ public class Terminal {
     @Override
     public int hashCode() {
         return Objects.hash(spell, name);
+    }
+
+    public Symbol toSymbol() {
+        return new Symbol(name, spell, Symbol.Type.TERM);
     }
 
     @Override
